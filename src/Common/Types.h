@@ -16,6 +16,8 @@
 #include <float.h>
 #include <limits.h>
 #include <stddef.h>
+// Para que todos lo conozcan
+#include "Debug.h"
 
 /* ---------------------------------------------------------------------------*/
 /* Defines, Estructuras y Typedef Compartidos 								  */

@@ -58,7 +58,7 @@ public:
 
     virtual void SetUp()
     {
-        UniqueDeviceId_t sateliteId = SATELITE_1;
+        UniqueDeviceId_t sateliteId = SATELITE_1_ID;
         Resources::ResourcesList_t sateliteResourcesList = {1, 2, 3, 5, 5, 7};
         m_satelite = new Satelite_Mock(sateliteId, sateliteResourcesList);
 

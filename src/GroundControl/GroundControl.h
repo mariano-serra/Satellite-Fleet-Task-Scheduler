@@ -11,13 +11,13 @@
 /* ---------------------------------------------------------------------------*/
 /* Includes 																  */
 /* ---------------------------------------------------------------------------*/
-#include "Resources.h"
-#include "Task.h"
-#include "Satelite.h"
+#include "PermutationTaskSolver.h"
+#include <map>
 
 /* ---------------------------------------------------------------------------*/
 /* Defines, Estructuras y Typedef Compartidos 								  */
 /* ---------------------------------------------------------------------------*/
+static const uint32_t MAX_TASK_NUMBER_PERMUTATION_SOLVER = 3;
 
 /*----------------------------------------------------------------------------*/
 /* Variables Compartidas                                                      */
@@ -30,14 +30,10 @@
 class GroundControl
 {
 public:
-    /*! Lista de Tareas */
-    typedef std::vector<Task*> TaskList_t;
-    typedef std::vector<Task::TaskId_t> TaskIdList_t;
-
     GroundControl(UniqueDeviceId_t id);
     ~GroundControl();
 
-    bool addListTaskToDo(TaskList_t taskList);
+    bool addListTaskToDo(PermutationTaskSolver::TaskList_t& taskList);
 
     void runnerTask(void);
 
@@ -51,40 +47,24 @@ private:
     // void updateSatelteTaskState(SateliteId_t id, Task* task);
 
     UniqueDeviceId_t m_groundControlId;
-    Resources* m_satelite1Resources;
-    Resources* m_satelite2Resources;
+    Resources* m_satelite1HardwareResources;
+    Resources* m_satelite1AvailableResources;
+    Resources* m_satelite2HardwareResources;
+    Resources* m_satelite2AvailableResources;
+
+    PermutationTaskSolver::TaskList_t m_TodoTaskList;
+    PermutationTaskSolver::TaskList_t m_BestTodoTaskList;
+    PermutationTaskSolver::TaskList_t m_Satelite1TaskList;
+    PermutationTaskSolver::TaskList_t m_Satelite2TaskList;
+
+    typedef std::map<Task::TaskId_t, Task*> TaskMap_t;
+    TaskMap_t m_taskMap;
+
+    bool validateTaskOverHardwareResources(Task& task);
+    void sortTodoTaskListByPayoff(void);
+    void calcBestTodoTaskList(void);
 
     void processTaskListToDo(void);
-
-    TaskList_t newTaskList;
-    TaskList_t satelite1TaskList;
-    TaskList_t satelite2TaskList;
-    TaskList_t todoTaskList;
-
-    /* Permutation Problem */
-    typedef std::vector<uint32_t> PermitationVector_t;
-    PermitationVector_t m_permutationVector;
-
-    typedef std::vector<UniqueDeviceId_t> DeviceVector_t;
-    typedef std::vector<DeviceVector_t> DevicePermutationMatrix_t;                  /* UniqueDeviceId = f(permutationNumber, TaskId) */
-    DevicePermutationMatrix_t m_devicePermutationMatrix;
-    
-    typedef std::vector<TaskList_t> TaskListVector_t;                              /* TaskList = f(UniqueDeviceId) */
-    typedef std::vector<TaskIdList_t> TaskIdListVector_t;
-    typedef std::vector<TaskListVector_t> TaskListPermutationMatrix_t;             /* TaskList = f(permutationNumber, UniqueDeviceId) */
-    TaskListPermutationMatrix_t m_taskListPermutationMatrix;
-
-    typedef std::vector<Task::Payoff_t> PayoffVector_t;
-    PayoffVector_t assignTaskPayoffVector;
-
-    typedef std::vector<Resources::ResourcesList_t> ResourcesListVector_t;
-    ResourcesListVector_t m_resourcesListVector;
-
-    void incrementDeviceVector(DeviceVector_t &vec, uint32_t deviceNumber);
-    void makeTaskPermutatioMatrix(TaskList_t& taskList);
-    void sortTaskPermutatioMatrixByPayoff(void);
-    void validateTaskPermutatioMatrix(void);
-
 };
 
 /*----------------------------------------------------------------------------*/

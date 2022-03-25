@@ -44,7 +44,6 @@ public:
 
     virtual void TearDown()
     {
-        mocko.destroy();
     }
 };
 

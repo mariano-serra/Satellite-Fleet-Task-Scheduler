@@ -32,7 +32,6 @@ class Satelite
 public:
     /* Mapa de Tareas */
     typedef int64_t TaskTime_t;
-    typedef std::map<Task*, TaskTime_t> TaskMap_t;
 
     Satelite(UniqueDeviceId_t id, Resources::ResourcesList_t resourcesList);
     ~Satelite();
@@ -53,6 +52,8 @@ private:
     UniqueDeviceId_t m_sateliteId;
     Resources *m_hardwareResources; // Bakup
     Resources *m_availableResources;
+
+    typedef std::map<Task*, TaskTime_t> TaskMap_t;
     TaskMap_t m_ongoingTasks;
 };
 

@@ -33,6 +33,11 @@ Task::Task(Task::TaskId_t taskId, std::string name, Resources::ResourcesList_t r
     m_state = WAITING_TO_BE_EXECUTED;
 }
 
+Task::~Task()
+{
+    
+}
+
 Task::Task(std::string name, Resources::ResourcesList_t resourcesList, Payoff_t payoff)
 {
     m_name = name;

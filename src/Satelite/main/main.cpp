@@ -26,76 +26,12 @@
 static std::vector<std::string> arguments;
 
 /* SATELITE */
-static SateliteId_t sateliteId;
+static UniqueDeviceId_t sateliteId;
 static Resources::ResourcesList_t sateliteResourcesList;
 
 /* ---------------------------------------------------------------------------*/
 /* Implementacion de clases y funciones                                       */
 /* ---------------------------------------------------------------------------*/
-
-bool parseArgument(std::vector<std::string> &arguments)
-{
-    bool ret = true;
-
-    if (arguments.size() == 5)
-    {
-        uint16_t index = 0;
-        for (std::vector<std::string>::iterator it = arguments.begin(); (it < arguments.end() && ret == true); ++it, ++index)
-        {
-            std::string argument = *it;
-            std::stringstream resourceString(argument);
-
-            switch(index)
-            {
-            case 0:
-                break;
-
-            case 1:
-                if (argument.compare(std::string{"-id"}))
-                {
-                    ret = false;
-                }
-                break;
-
-            case 2:
-                sateliteId = static_cast<SateliteId_t>(std::stoi(argument));
-                std::cout << "> Id = " << sateliteId << std::endl;
-                break;
-
-            case 3:
-                if (argument.compare(std::string{"-res"}))
-                {
-                    ret = false;
-                }
-                break;
-
-            case 4:
-                std::cout << "> Resources = {";
-                for (int i; resourceString >> i;)
-                {
-                    sateliteResourcesList.push_back(i);
-                    std::cout << i << ",";
-                    if (resourceString.peek() == ',')
-                    {
-                        resourceString.ignore();
-                    }
-                }
-                std::cout << "}" << std::endl;
-                break;
-
-            default:
-                break;
-            }
-        }
-    }
-    else
-    {
-        ret = false;
-    }
-
-    return ret;
-}
-
 
 int main(int argc, char **argv)
 {
@@ -105,7 +41,22 @@ int main(int argc, char **argv)
 
     /* Parse main arguments */
     arguments = std::vector<std::string>(argv, argv + argc);
-    ret = parseArgument(arguments);
+    if (arguments.size() == 2)
+    {
+
+        sateliteId = static_cast<UniqueDeviceId_t>(std::stoi(arguments[1]));
+
+        if (sateliteId == SATELITE_1_ID)
+        {
+            sateliteResourcesList = SATELITE_1_RES;
+            ret = true;
+        }
+        else if (sateliteId == SATELITE_2_ID)
+        {
+            sateliteResourcesList = SATELITE_2_RES;
+            ret = true;
+        }
+    }
 
     if (ret)
     {

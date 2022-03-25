@@ -14,6 +14,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include "Types.h"
 
 /* ---------------------------------------------------------------------------*/
 /* Defines, Estructuras y Typedef Compartidos 								  */
@@ -37,6 +38,8 @@ public:
     static int ipow(int base, int exp);
 };
 
+#ifdef DEBUG
+
 // Extiendo la libreria ostream para para poder imprimir vectores
 template <typename T>
 std::ostream& operator<<(std::ostream& output, std::vector<T> const& values)
@@ -49,6 +52,8 @@ std::ostream& operator<<(std::ostream& output, std::vector<T> const& values)
     output << "}";
     return output;
 }
+
+#endif
 
 /*----------------------------------------------------------------------------*/
 /* Fin 																		  */

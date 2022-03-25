@@ -47,7 +47,6 @@ public:
 	Task(std::string name, Resources::ResourcesList_t resourcesList, Payoff_t payoff);
 	~Task();
 
-
 	std::string getName(void);
 	Resources::ResourcesList_t getResourcesList(void);
 	Payoff_t getPayoff(void);
