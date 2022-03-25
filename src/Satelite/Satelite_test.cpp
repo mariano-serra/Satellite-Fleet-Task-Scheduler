@@ -34,8 +34,6 @@ using namespace testing;
 /* ----------------------------------------------------------------------------- */
 
 
-/* TODO: Debo sobrecargar los metodos Fake para poder mockeralos */
-
 class Satelite_Mock : public Satelite
 {
 public:

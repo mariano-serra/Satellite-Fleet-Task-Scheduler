@@ -51,10 +51,11 @@ public:
     typedef std::vector<Resources::ResourcesList_t> ResourcesListVector_t;
     static ResourcesListVector_t m_resourcesListVector;
 
+    static void initPermutatioMatrix(void);
     static void makeTaskPermutatioMatrix(TaskList_t& taskList);
     static void sortTaskPermutatioMatrixByPayoff(void);
     static bool validateTaskPermutatioMatrix(Resources& satelite1Resources, Resources& satelite2Resources, 
-                                             TaskList_t& satelite1TaskList, TaskList_t& satelite2TaskList); 
+                                             TaskList_t& unassignedTaskList, TaskList_t& satelite1TaskList, TaskList_t& satelite2TaskList); 
     
 private:
     static void incrementDeviceVector(DeviceVector_t &vec, uint32_t deviceNumber);

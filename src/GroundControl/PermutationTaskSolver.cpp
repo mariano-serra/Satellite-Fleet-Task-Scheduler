@@ -32,6 +32,15 @@ PermutationTaskSolver::ResourcesListVector_t PermutationTaskSolver::m_resourcesL
 /* Implementacion de clases y funciones                                       */
 /* ---------------------------------------------------------------------------*/
 
+void PermutationTaskSolver::initPermutatioMatrix(void)
+{
+    m_permutationVector.clear();
+    m_devicePermutationMatrix.clear();
+    m_taskListPermutationMatrix.clear();
+    m_assignTaskPayoffVector.clear();
+    m_resourcesListVector.clear();
+}
+
 void PermutationTaskSolver::incrementDeviceVector(DeviceVector_t& vec, uint32_t deviceNumber)
 {
     vec[0] = static_cast<UniqueDeviceId_t>(static_cast<uint32_t>(vec[0]) + 1);
@@ -95,15 +104,15 @@ void PermutationTaskSolver::makeTaskPermutatioMatrix(TaskList_t& taskList)
          *  Se utiliza el GROUND_CONTROL_ID, como indice de las tareas que no pueden ser asignadas a los satelites,
          *  por falta de recursos. */
         DEBUG_MSG("\t- Non Assigned TaskIdList:\t" << taskIdListVector[GROUND_CONTROL_ID]);
-        TaskList_t nonAssignTaskList = taskListVector[GROUND_CONTROL_ID];
-        Task::Payoff_t nonAssignTaskPayoff = 0;
+        TaskList_t unassignedTaskList = taskListVector[GROUND_CONTROL_ID];
+        Task::Payoff_t unassignedTaskPayoff = 0;
 
-        for (TaskList_t::iterator taskListIt = nonAssignTaskList.begin(); taskListIt < nonAssignTaskList.end(); ++taskListIt)
+        for (TaskList_t::iterator taskListIt = unassignedTaskList.begin(); taskListIt < unassignedTaskList.end(); ++taskListIt)
         {
             Task* task = (*taskListIt);
-            nonAssignTaskPayoff += task->getPayoff();
+            unassignedTaskPayoff += task->getPayoff();
         }
-        m_assignTaskPayoffVector.push_back(maxPayoff - nonAssignTaskPayoff);
+        m_assignTaskPayoffVector.push_back(maxPayoff - unassignedTaskPayoff);
         
         DEBUG_MSG("\t- Payoff:\t" << m_assignTaskPayoffVector[permutation] << std::endl);
 
@@ -125,7 +134,7 @@ void PermutationTaskSolver::sortTaskPermutatioMatrixByPayoff(void)
 }
 
 bool PermutationTaskSolver::validateTaskPermutatioMatrix(Resources& satelite1Resources, Resources& satelite2Resources, 
-                                                         TaskList_t& satelite1TaskList, TaskList_t& satelite2TaskList)
+                                                         TaskList_t& unassignedTaskList, TaskList_t& satelite1TaskList, TaskList_t& satelite2TaskList)
 {
     bool ret = false;
     uint32_t permutation = 0;
@@ -174,7 +183,7 @@ bool PermutationTaskSolver::validateTaskPermutatioMatrix(Resources& satelite1Res
 
     if (continueFlag == false)
     {
-
+        unassignedTaskList = taskListVector[GROUND_CONTROL_ID];
         satelite1TaskList = taskListVector[SATELITE_1_ID];
         satelite2TaskList = taskListVector[SATELITE_2_ID];
 

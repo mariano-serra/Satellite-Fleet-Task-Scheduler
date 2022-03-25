@@ -39,6 +39,12 @@ GroundControl::GroundControl(UniqueDeviceId_t id)
 
     m_satelite2HardwareResources = new Resources(SATELITE_2_RES);
     m_satelite2AvailableResources = new Resources(SATELITE_2_RES);
+
+	m_TodoTaskList.clear();
+	m_BestTodoTaskList.clear();
+	m_UnassignedTaskList.clear();
+	m_Satelite1TaskList.clear();
+	m_Satelite2TaskList.clear();
 }
 
 GroundControl::~GroundControl()
@@ -85,6 +91,16 @@ bool GroundControl::addListTaskToDo(PermutationTaskSolver::TaskList_t& taskList)
 	return true;
 }
 
+void GroundControl::sendSatelite1TaskList(PermutationTaskSolver::TaskList_t taskList)
+{
+	/* Hacia protocolo */
+}
+
+void GroundControl::sendSatelite2TaskList(PermutationTaskSolver::TaskList_t taskList)
+{
+	/* Hacia protocolo */
+}
+
 void GroundControl::runnerTask(void)
 {
 
@@ -126,10 +142,21 @@ void GroundControl::calcBestTodoTaskList(void)
 
 void GroundControl::processTaskListToDo(void)
 {
+	m_UnassignedTaskList.clear();
+	m_Satelite1TaskList.clear();
+	m_Satelite2TaskList.clear();
+
+	PermutationTaskSolver::initPermutatioMatrix();
 	PermutationTaskSolver::makeTaskPermutatioMatrix(m_BestTodoTaskList);
 	PermutationTaskSolver::sortTaskPermutatioMatrixByPayoff();
 	PermutationTaskSolver::validateTaskPermutatioMatrix(*m_satelite1AvailableResources, *m_satelite2AvailableResources,
-													    m_Satelite1TaskList, m_Satelite2TaskList);
+													    m_UnassignedTaskList, m_Satelite1TaskList, m_Satelite2TaskList);
+
+	sendSatelite1TaskList(m_Satelite1TaskList);
+	sendSatelite2TaskList(m_Satelite2TaskList);
+
+	m_TodoTaskList.insert(m_TodoTaskList.end(), m_UnassignedTaskList.begin(), m_UnassignedTaskList.end());
+	sortTodoTaskListByPayoff();
 }
 
 

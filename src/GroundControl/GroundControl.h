@@ -37,6 +37,9 @@ public:
 
     void runnerTask(void);
 
+    virtual void sendSatelite1TaskList(PermutationTaskSolver::TaskList_t taskList);
+    virtual void sendSatelite2TaskList(PermutationTaskSolver::TaskList_t taskList);
+
 private:
     
     // No se todavia como va a ser la interfaz hacia el proxy. 
@@ -54,6 +57,7 @@ private:
 
     PermutationTaskSolver::TaskList_t m_TodoTaskList;
     PermutationTaskSolver::TaskList_t m_BestTodoTaskList;
+    PermutationTaskSolver::TaskList_t m_UnassignedTaskList;
     PermutationTaskSolver::TaskList_t m_Satelite1TaskList;
     PermutationTaskSolver::TaskList_t m_Satelite2TaskList;
 

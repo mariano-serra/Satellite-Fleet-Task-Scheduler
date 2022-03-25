@@ -34,13 +34,20 @@ using namespace testing;
 /* ----------------------------------------------------------------------------- */
 
 
-/* TODO: Debo sobrecargar los metodos Fake para poder mockeralos */
+class GroundControl_Mock : public GroundControl
+{
+public:
+    using GroundControl::GroundControl;
+
+    MOCK_METHOD1(sendSatelite1TaskList, void(PermutationTaskSolver::TaskList_t));
+    MOCK_METHOD1(sendSatelite2TaskList, void(PermutationTaskSolver::TaskList_t));
+};
 
 class GroundControl_test  : public testing::Test
 {
 public:
 
-    GroundControl* m_groundControl;
+    GroundControl_Mock* m_groundControl;
     Task* m_task1;
     Task* m_task2;
     Task* m_task3;
@@ -53,7 +60,7 @@ public:
     virtual void SetUp()
     {
         UniqueDeviceId_t id = GROUND_CONTROL_ID;
-        m_groundControl = new GroundControl(id);
+        m_groundControl = new GroundControl_Mock(id);
 
         std::string task1Name = "task1";
         Resources::ResourcesList_t task1ResourcesList = {3,5,7};
@@ -88,12 +95,25 @@ public:
 
 /* === TEST CASES === */
 
-TEST_F(GroundControl_test, AvailableResourcesTest)
+TEST_F(GroundControl_test, AssingSateliteTaskTest)
 {
+    /* Resuelto despues de validacion de API PermutationTaskSolver */
+
+    // Task                     {task1,         task2,        ,task3,        ,task4         }
+    // TaskList:                {0x55c063667bd0,0x55c063667c40,0x55c063667cd0,0x55c063667d70}
+    // TodoTaskList:            {0x55c063667bd0,0x55c063667c40,0x55c063667cd0,0x55c063667d70}
+    // Sorted TodoTaskList:     {0x55c063667bd0,0x55c063667d70,0x55c063667c40,0x55c063667cd0}
+    // Trim TodoTaskList:       {0x55c063667cd0}
+
+    PermutationTaskSolver::TaskList_t expectedSatelite1TaskList = {m_task4};
+    PermutationTaskSolver::TaskList_t expectedSatelite2TaskList = {m_task1, m_task2};
+
+    EXPECT_CALL(*m_groundControl, sendSatelite1TaskList(expectedSatelite1TaskList));
+    EXPECT_CALL(*m_groundControl, sendSatelite2TaskList(expectedSatelite2TaskList));
     m_groundControl->addListTaskToDo(m_taskList);
-    EXPECT_TRUE(false);
 }
 
+/* Agregar mas test!!! */
 
 /* === FIN === */
 
