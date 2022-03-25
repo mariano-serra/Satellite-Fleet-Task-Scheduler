@@ -2,6 +2,8 @@
 /* Includes                                                                   */
 /* ---------------------------------------------------------------------------*/
 #include <iostream>
+#include <string>
+#include <sstream>
 #include "GroundControl.h"
 
 /* ---------------------------------------------------------------------------*/
@@ -28,7 +30,22 @@
 
 int main(int argc, char **argv)
 {
+    std::cout << "Start Ground Control" << std::endl;
 
+    GroundControl *groundControl = new GroundControl(GROUND_CONTROL_ID); 
+
+    /* Create Meassege Broker (Observer Pattern!) */
+    // saletelite se registra para recibir notidicaciones de protocolo 
+
+    /* SCHEDULER */
+    while(false)
+    {
+        groundControl->runnerTask();
+
+        // TODO: Add MessageBroker.runnerTask();
+    }
+
+    return 0;
 }
 
 /*----------------------------------------------------------------------------*/

@@ -35,7 +35,7 @@ static Resources::ResourcesList_t sateliteResourcesList;
 
 int main(int argc, char **argv)
 {
-    bool ret = false;
+    bool validArgument = false;
 
     std::cout << "Start Satelite" << std::endl;
 
@@ -49,16 +49,16 @@ int main(int argc, char **argv)
         if (sateliteId == SATELITE_1_ID)
         {
             sateliteResourcesList = SATELITE_1_RES;
-            ret = true;
+            validArgument = true;
         }
         else if (sateliteId == SATELITE_2_ID)
         {
             sateliteResourcesList = SATELITE_2_RES;
-            ret = true;
+            validArgument = true;
         }
     }
 
-    if (ret)
+    if (validArgument)
     {
         Satelite *satelite = new Satelite(sateliteId, sateliteResourcesList); 
 
