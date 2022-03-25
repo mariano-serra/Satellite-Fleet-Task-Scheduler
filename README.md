@@ -30,4 +30,9 @@ README
 	> sudo cp -r include/* /usr/include/
 
 * Build:
+	> chmod +x ./build.sh
 	> ./build.sh 2> build.log
+
+* UnitTest (Gtest / GMock):
+	> chmod +x ./unitTest.sh
+	> ./unitTest.sh

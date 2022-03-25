@@ -7,22 +7,22 @@ file(
     ./*.cpp
 )
 
-add_executable(main ${sources})
+add_executable(mainGroundControl ${sources})
 
 add_dependencies(
-    main
+    mainGroundControl
     GroundControl
     Common
 )
 
 target_include_directories(
-    main PUBLIC 
+    mainGroundControl PUBLIC 
     ${CMAKE_SOURCE_DIR}/Common
     ${CMAKE_SOURCE_DIR}/GroundControl
 )
 
 target_link_libraries(
-    main PUBLIC
+    mainGroundControl PUBLIC
     GroundControl
     Common
 )

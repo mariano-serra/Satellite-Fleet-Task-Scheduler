@@ -7,22 +7,22 @@ file(
     ./*.cpp
 )
 
-add_executable(main ${sources})
+add_executable(mainSatelite ${sources})
 
 add_dependencies(
-    main
+    mainSatelite
     Satelite
     Common
 )
 
 target_include_directories(
-    main PUBLIC 
+    mainSatelite PUBLIC 
     ${CMAKE_SOURCE_DIR}/Common
     ${CMAKE_SOURCE_DIR}/Satelite
 )
 
 target_link_libraries(
-    main PUBLIC
+    mainSatelite PUBLIC
     Satelite
     Common
 )

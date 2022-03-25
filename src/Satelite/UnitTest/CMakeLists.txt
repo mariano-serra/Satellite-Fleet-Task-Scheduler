@@ -15,18 +15,18 @@ file(
     ./*.cpp
 )
 
-add_executable(UnitTest ${sources})
+add_executable(UnitTestSatelite ${sources})
 
-target_compile_definitions(UnitTest PUBLIC UNIT_TESTS)
+target_compile_definitions(UnitTestSatelite PUBLIC UNIT_TESTS)
 
 add_dependencies(
-    UnitTest
+    UnitTestSatelite
     Satelite
     Common
 )
 
 target_include_directories(
-    UnitTest PUBLIC 
+    UnitTestSatelite PUBLIC 
     ${GTEST_INCLUDE_DIRS}
     ${GMOCK_INCLUDE_DIRS}
     ${CMAKE_SOURCE_DIR}/Satelite
@@ -34,7 +34,7 @@ target_include_directories(
 )
 
 target_link_libraries(
-    UnitTest PUBLIC
+    UnitTestSatelite PUBLIC
     gtest
     gmock
     pthread
@@ -45,4 +45,4 @@ target_link_libraries(
     Common
 )
 
-add_test(AllTestsInUnitTest UnitTest)
+add_test(AllTestsInUnitTest UnitTestSatelite)

@@ -1,9 +1,1 @@
-/home/mariano/Documents/Satellogic/src/GroundControl/GroundControl.cpp: In member function ‘bool GroundControl::addListTaskToDo(GroundControl::TaskList_t)’:
-/home/mariano/Documents/Satellogic/src/GroundControl/GroundControl.cpp:55:1: warning: no return statement in function returning non-void [-Wreturn-type]
-   55 | }
-      | ^
-/home/mariano/Documents/Satellogic/src/GroundControl/GroundControl.cpp: In member function ‘bool GroundControl::addListTaskToDo(GroundControl::TaskList_t)’:
-/home/mariano/Documents/Satellogic/src/GroundControl/GroundControl.cpp:55:1: warning: no return statement in function returning non-void [-Wreturn-type]
-   55 | }
-      | ^
-./build.sh: 10: ./main/main: not found
+./build.sh: 12: ./main/main: not found
