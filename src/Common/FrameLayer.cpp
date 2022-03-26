@@ -13,7 +13,7 @@
 /* ---------------------------------------------------------------------------*/
 /* Defines, Estructuras y Typedef                                             */
 /* ---------------------------------------------------------------------------*/
-
+static const FrameId_t UnitqueTaskFrameId = 0x14F6FE0C; /* Hash */
 
 /* ---------------------------------------------------------------------------*/
 /* Declaracion de funciones                                                   */
@@ -30,14 +30,15 @@
 FrameLayer::FrameLayer(ReceiveFrameTask_t receiveFrameTaskHandler, Socket::SocketType sockeType, UniqueDeviceId_t serverId)
 {
     m_receiveFrameTaskHandler = receiveFrameTaskHandler;
+    m_sockeType = sockeType;
 
-    if (sockeType == Socket::SERVER)
+    if (m_sockeType == Socket::SERVER)
     {
-        m_socket = new SocketServer(serverId, processReciveData);
+        m_socketServer = new SocketServer(serverId, processReciveData);
     }
-    else if (sockeType == Socket::CLIENT)
+    else if (m_sockeType == Socket::CLIENT)
     {
-        m_socket = new SocketClient(serverId, processReciveData);
+        m_socketClient = new SocketClient(serverId, processReciveData);
     }
 }
 
@@ -48,10 +49,31 @@ FrameLayer::~FrameLayer()
 
 void FrameLayer::sendFrameTask(FrameTask_t& taskFrame)
 {
+    taskFrame.frameId = UnitqueTaskFrameId;
+
     auto const ptr = reinterpret_cast<BufferData_t*>(&taskFrame);
     CommunicationsBuffer_t data(ptr, ptr + sizeof(FrameTask_t));
 
-    m_socket->sendData(data);
+    if (m_sockeType == Socket::SERVER)
+    {
+        m_socketServer->sendData(data);
+    }
+    else if (m_sockeType == Socket::CLIENT)
+    {
+        m_socketClient->sendData(data);
+    }
+}
+
+void FrameLayer::runnerTask(void)
+{
+    if (m_sockeType == Socket::SERVER)
+    {
+        m_socketServer->runnerTask();
+    }
+    else if (m_sockeType == Socket::CLIENT)
+    {
+        m_socketClient->runnerTask();
+    }
 }
 
 void FrameLayer::processReciveData(BufferData_t data)

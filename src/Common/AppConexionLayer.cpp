@@ -43,12 +43,18 @@ void AppConexionLayer::sendTask(Task& task)
     FrameTask_t frameTask;
     Resources::ResourcesList_t resourcesList = task.getResourcesList();
 
-    frameTask.id = task.getId();
+    frameTask.taskId = task.getId();
     frameTask.resourcesAmount = resourcesList.size();
     std::copy(resourcesList.begin(), resourcesList.end(), frameTask.resourcesList);
     frameTask.state = task.getState();
 
     m_frameLayer->sendFrameTask(frameTask);
+}
+
+
+void AppConexionLayer::runnerTask(void)
+{
+    m_frameLayer->runnerTask();
 }
 
 void AppConexionLayer::receiveFrameTask(FrameTask_t& task)

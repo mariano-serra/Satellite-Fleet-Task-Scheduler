@@ -12,15 +12,19 @@
 /* Includes 																  */
 /* ---------------------------------------------------------------------------*/
 #include "Task.h"
-#include "Socket.h"
+#include "SocketServer.h"
+#include "SocketClient.h"
 
 /* ---------------------------------------------------------------------------*/
 /* Defines, Estructuras y Typedef Compartidos 								  */
 /* ---------------------------------------------------------------------------*/
+typedef uint32_t FrameId_t;
+
+
 typedef struct FrameTask
 {
-    Task::TaskId_t id;
-    /* Por simplificacion, no trasmito, el nombre */
+    FrameId_t frameId;           /* Like a SOF */
+    Task::TaskId_t taskId;
     Resources::ResourceAmount_t resourcesAmount;
     Resources::ResourceElement_t resourcesList[256];
     Task::State_t state;
@@ -43,11 +47,15 @@ public:
     ~FrameLayer();
     
     void sendFrameTask(FrameTask_t& taskFrame);
+    void runnerTask(void);
 
 private:
     ReceiveFrameTask_t m_receiveFrameTaskHandler;
 
-    Socket* m_socket;
+    /* Workaround */
+    Socket::SocketType m_sockeType;
+    SocketServer* m_socketServer;
+    SocketClient* m_socketClient;
     static void processReciveData(BufferData_t data);
 };
 

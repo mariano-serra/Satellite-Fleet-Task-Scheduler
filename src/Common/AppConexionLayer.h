@@ -33,7 +33,8 @@ public:
     ~AppConexionLayer();
     
     void sendTask(Task& task);
-
+    void runnerTask(void);
+    
 private:
     ReceiveTask_t m_receiveTaskHandler;
 
