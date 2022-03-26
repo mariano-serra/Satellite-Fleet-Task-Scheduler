@@ -37,12 +37,14 @@ int main(int argc, char **argv)
 
     /* Create Meassege Broker (Observer Pattern!) */
     SocketClient* clientSatelite1 = new SocketClient(SATELITE_1_ID, NULL);
+    SocketClient* clientSatelite2 = new SocketClient(SATELITE_2_ID, NULL);
 
     /* SCHEDULER */
     while(true)
     {
         /* Socket Runner */
         clientSatelite1->runnerTask();
+        clientSatelite2->runnerTask();
 
         /* Task  Runner */
         groundControl->runnerTask();

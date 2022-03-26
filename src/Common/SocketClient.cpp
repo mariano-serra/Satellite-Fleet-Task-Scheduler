@@ -75,9 +75,9 @@ void SocketClient::runnerTask(void)
     /* Vaciar buffer de transmision*/
     // n = write( newsockfd, "Obtuve su mensaje", 18 );
 
-    memset( buffer, '\0', MAX_BUFFER_SIZE );
+    // memset( buffer, '\0', MAX_BUFFER_SIZE );
     /* Leer y procesar buffer de recepcion */
-    n = read( sockfd, buffer, MAX_BUFFER_SIZE - 1 );
+    // n = read( sockfd, buffer, MAX_BUFFER_SIZE - 1 );
     // processReciveData()
 }
 

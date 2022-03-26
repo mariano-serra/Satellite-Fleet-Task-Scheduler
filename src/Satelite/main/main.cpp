@@ -69,7 +69,6 @@ int main(int argc, char **argv)
         /* SCHEDULER */
         while(true)
         {
-            DEBUG_MSG("Satelite Runner()" << std::endl);
             /* Socket Runner */
             server->runnerTask();
 

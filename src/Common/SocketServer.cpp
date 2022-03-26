@@ -84,15 +84,16 @@ void SocketServer::runnerTask(void)
     switch(m_state)
     {
     case CONNECTED:
-        memset( buffer, 0, MAX_BUFFER_SIZE );
+        // memset( buffer, 0, MAX_BUFFER_SIZE );
         /* Leer y procesar buffer de recepcion */
-        n = read( newsockfd, buffer, MAX_BUFFER_SIZE - 1 );
+        // n = read( newsockfd, buffer, MAX_BUFFER_SIZE - 1 );
         // processReciveData()
 
         /* Vaciar buffer de transmision*/
         // n = write( newsockfd, "Obtuve su mensaje", 18 );
 
         break;
+
     case WAITING_FOR_CLIENT:
 
         newsockfd = accept(sockfd, (struct sockaddr *) &cli_addr, &clilen);    
