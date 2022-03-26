@@ -36,11 +36,13 @@ static const uint16_t MaxTaskTime = 100;
  * \\brief Constructor
  **/
 
-Satelite::Satelite(UniqueDeviceId_t id, Resources::ResourcesList_t resourcesList)
+Satelite::Satelite(UniqueDeviceId_t id, Resources::ResourcesList_t resourcesList, AppConexionLayer* appConexionLayer)
 {
     m_sateliteId = id;
     m_hardwareResources = new Resources(resourcesList);
     m_availableResources = new Resources(resourcesList);
+
+    m_appConexionLayer = appConexionLayer;
 }
 
 Satelite::~Satelite()
@@ -75,12 +77,15 @@ void Satelite::setTaskState(Task* task, Task::State_t state)
 {
     task->setState(state);
     /* Enviar estado a estacion terrena */
-    // TODO
+    if (m_appConexionLayer)
+    {
+        m_appConexionLayer->sendTask((*task));
+    }
 }
 
 void Satelite::runnerTask(void)
 {
-
+    /* Satelite Runner */
     for (TaskMap_t::iterator ongoingTask = m_ongoingTasks.begin(); ongoingTask != m_ongoingTasks.end(); ++ongoingTask)
     {
 

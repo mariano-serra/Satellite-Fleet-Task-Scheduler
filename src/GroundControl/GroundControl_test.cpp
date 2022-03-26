@@ -60,7 +60,7 @@ public:
     virtual void SetUp()
     {
         UniqueDeviceId_t id = GROUND_CONTROL_ID;
-        m_groundControl = new GroundControl_Mock(id);
+        m_groundControl = new GroundControl_Mock(id, NULL, NULL);
 
         std::string task1Name = "task1";
         Resources::ResourcesList_t task1ResourcesList = {3,5,7};

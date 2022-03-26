@@ -29,7 +29,7 @@
 /* Implementacion de clases y funciones                                       */
 /* ---------------------------------------------------------------------------*/
     
-GroundControl::GroundControl(UniqueDeviceId_t id)
+GroundControl::GroundControl(UniqueDeviceId_t id, AppConexionLayer* satelite1AppConexionLayer, AppConexionLayer* satelite2AppConexionLayer)
 {
 	m_groundControlId = id;
 
@@ -44,6 +44,9 @@ GroundControl::GroundControl(UniqueDeviceId_t id)
 	m_UnassignedTaskList.clear();
 	m_Satelite1TaskList.clear();
 	m_Satelite2TaskList.clear();
+
+	m_satelite1AppConexionLayer = satelite1AppConexionLayer;
+	m_satelite2AppConexionLayer = satelite2AppConexionLayer;
 }
 
 GroundControl::~GroundControl()
@@ -98,6 +101,10 @@ void GroundControl::sendSatelite1TaskList(PermutationTaskSolver::TaskList_t task
 		Task* task = (*taskIt);
 
 		/* Asigno la tarea al satelite mediante el protocolo */
+		if (m_satelite1AppConexionLayer)
+		{
+			m_satelite1AppConexionLayer->sendTask((*task));
+		}
 
 		/* Quito los recursos disponibles de ese satelite mientras este realizando la tarea */
 		m_satelite1AvailableResources->substrac(task->getResourcesList());
@@ -112,6 +119,10 @@ void GroundControl::sendSatelite2TaskList(PermutationTaskSolver::TaskList_t task
 		Task* task = (*taskIt);
 
 		/* Asigno la tarea al satelite mediante el protocolo */
+		if (m_satelite2AppConexionLayer)
+		{
+			m_satelite2AppConexionLayer->sendTask((*task));
+		}
 
 		/* Quito los recursos disponibles de ese satelite mientras este realizando la tarea */
 		m_satelite2AvailableResources->substrac(task->getResourcesList());

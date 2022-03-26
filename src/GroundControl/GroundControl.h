@@ -12,6 +12,7 @@
 /* Includes 																  */
 /* ---------------------------------------------------------------------------*/
 #include "PermutationTaskSolver.h"
+#include "AppConexionLayer.h"
 #include <map>
 
 /* ---------------------------------------------------------------------------*/
@@ -30,7 +31,7 @@ static const uint32_t MAX_TASK_NUMBER_PERMUTATION_SOLVER = 3;
 class GroundControl
 {
 public:
-    GroundControl(UniqueDeviceId_t id);
+    GroundControl(UniqueDeviceId_t id, AppConexionLayer* satelite1AppConexionLayer, AppConexionLayer* satelite2AppConexionLayer);
     ~GroundControl();
 
     bool addListTaskToDo(PermutationTaskSolver::TaskList_t& taskList);
@@ -69,6 +70,9 @@ private:
     void calcBestTodoTaskList(void);
 
     void processTaskListToDo(void);
+
+    AppConexionLayer* m_satelite1AppConexionLayer;
+    AppConexionLayer* m_satelite2AppConexionLayer;
 };
 
 /*----------------------------------------------------------------------------*/

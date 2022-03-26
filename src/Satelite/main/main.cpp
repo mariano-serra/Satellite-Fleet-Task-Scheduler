@@ -4,7 +4,6 @@
 #include <string>
 #include <sstream>
 #include "Satelite.h"
-#include "SocketServer.h"
 
 /* ---------------------------------------------------------------------------*/
 /* Debug                                                                      */
@@ -43,7 +42,6 @@ int main(int argc, char **argv)
     arguments = std::vector<std::string>(argv, argv + argc);
     if (arguments.size() == 2)
     {
-
         sateliteId = static_cast<UniqueDeviceId_t>(std::stoi(arguments[1]));
 
         if (sateliteId == SATELITE_1_ID)
@@ -60,21 +58,20 @@ int main(int argc, char **argv)
 
     if (validArgument)
     {
-        Satelite* satelite = new Satelite(sateliteId, sateliteResourcesList);
+        /* AppConexionLayer */
+        AppConexionLayer* appConexionLayer = new AppConexionLayer(NULL, Socket::SocketType::SERVER, sateliteId);
 
-        /* Create Meassege Broker (Observer Pattern!) */
-        SocketServer* server = new SocketServer(sateliteId, NULL);
+        /* Satelite */
+        Satelite* satelite = new Satelite(sateliteId, sateliteResourcesList, appConexionLayer);
 
         /* SCHEDULER */
         while(true)
         {
             /* Socket Runner */
-            server->runnerTask();
+            appConexionLayer->runnerTask();
 
             /* Task  Runner */
-            // satelite->runnerTask();
-
-            // TODO: Add MessageBroker.runnerTask();
+            satelite->runnerTask();
         }    
     }
 

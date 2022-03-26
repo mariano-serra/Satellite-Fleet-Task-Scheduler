@@ -4,7 +4,6 @@
 #include <string>
 #include <sstream>
 #include "GroundControl.h"
-#include "SocketClient.h"
 
 /* ---------------------------------------------------------------------------*/
 /* Debug                                                                      */
@@ -32,18 +31,29 @@ int main(int argc, char **argv)
 {
     std::cout << "Start Ground Control" << std::endl;
 
-    GroundControl *groundControl = new GroundControl(GROUND_CONTROL_ID);
-
     /* Create Meassege Broker (Observer Pattern!) */
-    SocketClient* clientSatelite1 = new SocketClient(SATELITE_1_ID, NULL);
-    SocketClient* clientSatelite2 = new SocketClient(SATELITE_2_ID, NULL);
+    AppConexionLayer* satelite1AppConexionLayer = new AppConexionLayer(NULL, Socket::SocketType::CLIENT, SATELITE_1_ID);
+    // AppConexionLayer* satelite2AppConexionLayer = new AppConexionLayer(NULL, Socket::SocketType::CLIENT, SATELITE_2_ID);
+
+    GroundControl *groundControl = new GroundControl(GROUND_CONTROL_ID, satelite1AppConexionLayer, NULL);
+
+
+    /* Tareas Harcodeadas */
+    PermutationTaskSolver::TaskList_t taskList;
+    Task task1("task1", {3,4,5}, 1.0f);
+    taskList.push_back(&task1);
+
+    Task task2("task2", {1,5,5,7}, 3.33f);
+    // taskList.push_back(&task2);
+    
+    groundControl->addListTaskToDo(taskList);
 
     /* SCHEDULER */
     while(true)
     {
         /* Socket Runner */
-        clientSatelite1->runnerTask();
-        clientSatelite2->runnerTask();
+        satelite1AppConexionLayer->runnerTask();
+        //satelite2AppConexionLayer->runnerTask();
 
         /* Task  Runner */
         groundControl->runnerTask();

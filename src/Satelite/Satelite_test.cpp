@@ -58,7 +58,7 @@ public:
     {
         UniqueDeviceId_t sateliteId = SATELITE_1_ID;
         Resources::ResourcesList_t sateliteResourcesList = {1, 2, 3, 5, 5, 7};
-        m_satelite = new Satelite_Mock(sateliteId, sateliteResourcesList);
+        m_satelite = new Satelite_Mock(sateliteId, sateliteResourcesList, NULL);
 
         std::string task1Name = "fotos";
         Resources::ResourcesList_t task1ResourcesList = {3, 5, 5, 7};

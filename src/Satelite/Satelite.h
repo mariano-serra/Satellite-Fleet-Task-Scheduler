@@ -14,6 +14,7 @@
 #include "SharedDeclarations.h"
 #include "Resources.h"
 #include "Task.h"
+#include "AppConexionLayer.h"
 
 /* ---------------------------------------------------------------------------*/
 /* Defines, Estructuras y Typedef Compartidos 								  */
@@ -33,7 +34,7 @@ public:
     /* Mapa de Tareas */
     typedef int64_t TaskTime_t;
 
-    Satelite(UniqueDeviceId_t id, Resources::ResourcesList_t resourcesList);
+    Satelite(UniqueDeviceId_t id, Resources::ResourcesList_t resourcesList, AppConexionLayer* appConexionLayer);
     ~Satelite();
 
     Resources::ResourcesList_t getAvailableResources(void);
@@ -55,6 +56,8 @@ private:
 
     typedef std::map<Task*, TaskTime_t> TaskMap_t;
     TaskMap_t m_ongoingTasks;
+
+    AppConexionLayer* m_appConexionLayer;
 };
 
 /*----------------------------------------------------------------------------*/
