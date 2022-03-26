@@ -15,7 +15,7 @@
 /* ---------------------------------------------------------------------------*/
 /* Defines, Estructuras y Typedef Compartidos 								  */
 /* ---------------------------------------------------------------------------*/
-// #define DEBUG
+#define DEBUG
 
 #ifdef DEBUG
 #define DEBUG_MSG(str) do { std::cout << str; } while( false )

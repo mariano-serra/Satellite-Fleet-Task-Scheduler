@@ -5,6 +5,7 @@
 #include <string>
 #include <sstream>
 #include "Satelite.h"
+#include "SocketServer.h"
 
 /* ---------------------------------------------------------------------------*/
 /* Debug                                                                      */
@@ -60,15 +61,20 @@ int main(int argc, char **argv)
 
     if (validArgument)
     {
-        Satelite *satelite = new Satelite(sateliteId, sateliteResourcesList); 
+        Satelite* satelite = new Satelite(sateliteId, sateliteResourcesList);
 
         /* Create Meassege Broker (Observer Pattern!) */
-        // saletelite se registra para recibir notidicaciones de protocolo 
+        SocketServer* server = new SocketServer(sateliteId, NULL);
 
         /* SCHEDULER */
-        while(false)
+        while(true)
         {
-            satelite->runnerTask();
+            DEBUG_MSG("Satelite Runner()" << std::endl);
+            /* Socket Runner */
+            server->runnerTask();
+
+            /* Task  Runner */
+            // satelite->runnerTask();
 
             // TODO: Add MessageBroker.runnerTask();
         }    

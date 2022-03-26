@@ -30,6 +30,8 @@ static const Resources::ResourcesList_t SATELITE_1_RES = {1, 2, 3, 4, 5, 6, 7, 8
 static const Resources::ResourcesList_t SATELITE_2_RES = {1, 2, 3, 5, 5, 6, 7, 8, 10};
 
 
+typedef std::vector<uint8_t> CommunicationsBuffer_t;
+
 typedef enum
 {
     UPDATE_AVAILABLE_RESOURCES,

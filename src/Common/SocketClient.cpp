@@ -1,11 +1,9 @@
 /* ---------------------------------------------------------------------------*/
 /* Includes                                                                   */
 /* ---------------------------------------------------------------------------*/
-#include <iostream>
-#include <string>
-#include <sstream>
-#include "GroundControl.h"
+#include <unistd.h>
 #include "SocketClient.h"
+#include "Utilities.h"
 
 /* ---------------------------------------------------------------------------*/
 /* Debug                                                                      */
@@ -29,28 +27,63 @@
 /* Implementacion de clases y funciones                                       */
 /* ---------------------------------------------------------------------------*/
 
-int main(int argc, char **argv)
+
+SocketClient::SocketClient(UniqueDeviceId_t server, ProcessReciveData_t processReciveData)
 {
-    std::cout << "Start Ground Control" << std::endl;
-
-    GroundControl *groundControl = new GroundControl(GROUND_CONTROL_ID);
-
-    /* Create Meassege Broker (Observer Pattern!) */
-    SocketClient* clientSatelite1 = new SocketClient(SATELITE_1_ID, NULL);
-
-    /* SCHEDULER */
-    while(true)
+    /* Defino nombre de Server */
+    char sat1ServerName[] = "../../Satelite/main/SAT1_SERVER";
+    char sat2ServerName[] = "../../Satelite/main/SAT2_SERVER";
+    char* serverName;
+    if (server == SATELITE_1_ID)
     {
-        /* Socket Runner */
-        clientSatelite1->runnerTask();
-
-        /* Task  Runner */
-        groundControl->runnerTask();
-
-        // TODO: Add MessageBroker.runnerTask();
+        serverName = sat1ServerName;
     }
+    else
+    {
+        serverName = sat2ServerName;
+    }
+    DEBUG_MSG("serverName: " << serverName << std::endl);
 
-    return 0;
+    /* Inicializacion de Socket */
+    memset((char *)&serv_addr, '\0', sizeof(serv_addr));
+    serv_addr.sun_family = AF_UNIX;
+    strcpy(serv_addr.sun_path, serverName);
+    servlen = strlen( serv_addr.sun_path) + sizeof(serv_addr.sun_family);
+
+    sockfd = socket(AF_UNIX, SOCK_STREAM, 0);
+
+    connect(sockfd, (struct sockaddr *)&serv_addr, servlen);
+
+    /* Handler de recepcion */
+    m_processReciveData = processReciveData;
+
+    DEBUG_MSG("CLIENT INIT" << std::endl);
+}
+
+SocketClient::~SocketClient()
+{
+
+}
+
+void SocketClient::sendData(CommunicationsBuffer_t* data)
+{
+
+}
+
+void SocketClient::runnerTask(void)
+{
+    /* Vaciar buffer de transmision*/
+    // n = write( newsockfd, "Obtuve su mensaje", 18 );
+
+    memset( buffer, '\0', MAX_BUFFER_SIZE );
+    /* Leer y procesar buffer de recepcion */
+    n = read( sockfd, buffer, MAX_BUFFER_SIZE - 1 );
+    // processReciveData()
+}
+
+void SocketClient::processReciveData(CommunicationsBuffer_t* data)
+{
+
 }
 
 /*----------------------------------------------------------------------------*/
