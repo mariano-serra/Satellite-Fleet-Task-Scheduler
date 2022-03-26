@@ -42,22 +42,27 @@ SocketClient::SocketClient(UniqueDeviceId_t server, ProcessReciveData_t processR
     {
         serverName = sat2ServerName;
     }
-    DEBUG_MSG("serverName: " << serverName << std::endl);
 
     /* Inicializacion de Socket */
-    memset((char *)&serv_addr, '\0', sizeof(serv_addr));
-    serv_addr.sun_family = AF_UNIX;
-    strcpy(serv_addr.sun_path, serverName);
-    servlen = strlen( serv_addr.sun_path) + sizeof(serv_addr.sun_family);
+    if ( (sock = socket(AF_UNIX, SOCK_STREAM, 0)) == -1  )
+    {
+        DEBUG_MSG("Client: Error on socket() call" << std::endl);
+        return;
+    }
 
-    sockfd = socket(AF_UNIX, SOCK_STREAM, 0);
+    remote.sun_family = AF_UNIX;
+    strcpy( remote.sun_path, serverName );
+    data_len = strlen(remote.sun_path) + sizeof(remote.sun_family);
 
-    connect(sockfd, (struct sockaddr *)&serv_addr, servlen);
+    DEBUG_MSG("Client: Trying to connect..." << std::endl);
+    if ( connect(sock, (struct sockaddr*)&remote, data_len) == -1 )
+    {
+        DEBUG_MSG("Client: Error on connect call" << std::endl);
+        return;
+    }
 
-    /* Handler de recepcion */
-    m_processReciveData = processReciveData;
+    DEBUG_MSG("Client: Connected" << std::endl);
 
-    DEBUG_MSG("CLIENT INIT" << std::endl);
 }
 
 SocketClient::~SocketClient()

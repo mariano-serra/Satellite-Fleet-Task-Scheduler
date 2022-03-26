@@ -43,15 +43,18 @@ public:
 
 private:
     /* Socket Data */
-    int sockfd, newsockfd, servlen, n, buf, pid;
-    unsigned int clilen;
-    struct sockaddr_un  cli_addr, serv_addr;
-    char buffer[MAX_BUFFER_SIZE];
+    int s = 0;
+    int s2 = 0;
+    struct sockaddr_un local, remote;
+    int len = 0;
+    unsigned int sock_len = 0;
 
     typedef enum State
     {
         WAITING_FOR_CLIENT,
-        CONNECTED
+        CONNECTED,
+        /*---*/
+        NUMBER_STATES
     } State_t;
     State_t m_state;
 

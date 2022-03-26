@@ -43,9 +43,9 @@ public:
 
 private:
     /* Socket Data */
-    int sockfd, servlen, n;
-    struct sockaddr_un serv_addr;
-    char buffer[MAX_BUFFER_SIZE];
+    int sock = 0;
+    int data_len = 0;
+    struct sockaddr_un remote;
 
     /*  */
     ProcessReciveData_t m_processReciveData;
