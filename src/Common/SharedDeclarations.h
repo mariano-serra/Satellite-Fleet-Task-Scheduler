@@ -33,19 +33,6 @@ static const Resources::ResourcesList_t SATELITE_2_RES = {1, 2, 3, 5, 5, 6, 7, 8
 #define BUFFER_SIZE (200)
 typedef char BufferData_t;
 typedef std::vector<BufferData_t> CommunicationsBuffer_t;
-typedef void (*ProcessReciveData_t)(BufferData_t data);
-
-
-/* Message Commands */
-typedef enum
-{
-    UPDATE_AVAILABLE_RESOURCES,
-    ADD_TASK_TODO,
-    UPDATE_TASK_STATE,
-    /* */
-    NUM_COMM_CMDS,
-} CommunicationsCmds_t;
-
 
 /*----------------------------------------------------------------------------*/
 /* Variables Compartidas                                                      */

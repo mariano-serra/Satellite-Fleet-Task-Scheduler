@@ -28,13 +28,13 @@
 /* ---------------------------------------------------------------------------*/
 
 
-SocketClient::SocketClient(UniqueDeviceId_t server, ProcessReciveData_t processReciveData)
+SocketClient::SocketClient(UniqueDeviceId_t serverId, ProcessReciveData_t processReciveData)
 {
     /* Defino nombre de Server */
     char sat1ServerName[] = "../../Satelite/main/SAT1_SERVER";
     char sat2ServerName[] = "../../Satelite/main/SAT2_SERVER";
     char* serverName;
-    if (server == SATELITE_1_ID)
+    if (serverId == SATELITE_1_ID)
     {
         serverName = sat1ServerName;
     }

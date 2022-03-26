@@ -28,13 +28,13 @@ static const uint32_t nIncomingConnections = 5;
 /* ---------------------------------------------------------------------------*/
 
 
-SocketServer::SocketServer(UniqueDeviceId_t server, ProcessReciveData_t processReciveData)
+SocketServer::SocketServer(UniqueDeviceId_t serverId, ProcessReciveData_t processReciveData)
 {
     /* Defino nombre de Server */
     char sat1ServerName[] = "SAT1_SERVER";
     char sat2ServerName[] = "SAT2_SERVER";
     char* serverName;
-    if (server == SATELITE_1_ID)
+    if (serverId == SATELITE_1_ID)
     {
         serverName = sat1ServerName;
     }

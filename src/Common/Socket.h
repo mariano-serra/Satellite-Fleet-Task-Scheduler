@@ -19,6 +19,7 @@
 /* ---------------------------------------------------------------------------*/
 /* Defines, Estructuras y Typedef Compartidos 								  */
 /* ---------------------------------------------------------------------------*/
+typedef void (*ProcessReciveData_t)(BufferData_t data);
 
 /*----------------------------------------------------------------------------*/
 /* Variables Compartidas                                                      */
@@ -30,6 +31,12 @@
 class Socket
 {
 public:
+    typedef enum SocketType
+    {
+        SERVER,
+        CLIENT,
+    }SocketType_t;
+
     /* Socket Data */
     int m_socket = 0;
 

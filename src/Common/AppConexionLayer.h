@@ -5,42 +5,45 @@
  *  \brief [Breve descripcion del Modulo]
  */
 
-#ifndef SOCKET_CLIENT_H
-#define SOCKET_CLIENT_H
+#ifndef APP_CONEXION_LAYER_H
+#define APP_CONEXION_LAYER_H
 
 /* ---------------------------------------------------------------------------*/
 /* Includes 																  */
 /* ---------------------------------------------------------------------------*/
-#include "Socket.h"
+#include "FrameLayer.h"
 
 /* ---------------------------------------------------------------------------*/
 /* Defines, Estructuras y Typedef Compartidos 								  */
 /* ---------------------------------------------------------------------------*/
+typedef void (*ReceiveTask_t)(Task& task);
 
 /*----------------------------------------------------------------------------*/
 /* Variables Compartidas                                                      */
 /*----------------------------------------------------------------------------*/
 
+
 /*----------------------------------------------------------------------------*/
 /* Clases y Prototipos de funciones Compartidas 				              */
 /*----------------------------------------------------------------------------*/
-class SocketClient : public Socket
+class AppConexionLayer
 {
 public:
-    SocketClient(UniqueDeviceId_t serverId, ProcessReciveData_t processReciveData);
-    ~SocketClient();
+    AppConexionLayer(ReceiveTask_t receiveTaskHandler, Socket::SocketType sockeType, UniqueDeviceId_t serverId);
+    ~AppConexionLayer();
     
-    void runnerTask(void);
+    void sendTask(Task& task);
 
 private:
-    /* Socket Data */
-    int m_socketClient = 0;
-    int m_data_len = 0;
-    struct sockaddr_un m_remote;
+    ReceiveTask_t m_receiveTaskHandler;
+
+    FrameLayer* m_frameLayer;
+    static void receiveFrameTask(FrameTask_t& task);
+
 };
 
 /*----------------------------------------------------------------------------*/
 /* Fin 																		  */
 /*----------------------------------------------------------------------------*/
 
-#endif // SOCKET_CLIENT_H
+#endif // APP_CONEXION_LAYER_H

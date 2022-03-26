@@ -5,17 +5,28 @@
  *  \brief [Breve descripcion del Modulo]
  */
 
-#ifndef SOCKET_CLIENT_H
-#define SOCKET_CLIENT_H
+#ifndef FRAME_LAYER_H
+#define FRAME_LAYER_H
 
 /* ---------------------------------------------------------------------------*/
 /* Includes 																  */
 /* ---------------------------------------------------------------------------*/
+#include "Task.h"
 #include "Socket.h"
 
 /* ---------------------------------------------------------------------------*/
 /* Defines, Estructuras y Typedef Compartidos 								  */
 /* ---------------------------------------------------------------------------*/
+typedef struct FrameTask
+{
+    Task::TaskId_t id;
+    /* Por simplificacion, no trasmito, el nombre */
+    Resources::ResourceAmount_t resourcesAmount;
+    Resources::ResourceElement_t resourcesList[256];
+    Task::State_t state;
+}FrameTask_t;
+
+typedef void (*ReceiveFrameTask_t)(FrameTask_t& frameTask);
 
 /*----------------------------------------------------------------------------*/
 /* Variables Compartidas                                                      */
@@ -24,23 +35,24 @@
 /*----------------------------------------------------------------------------*/
 /* Clases y Prototipos de funciones Compartidas 				              */
 /*----------------------------------------------------------------------------*/
-class SocketClient : public Socket
+class FrameLayer
 {
 public:
-    SocketClient(UniqueDeviceId_t serverId, ProcessReciveData_t processReciveData);
-    ~SocketClient();
+
+    FrameLayer(ReceiveFrameTask_t receiveFrameTaskHandler, Socket::SocketType sockeType, UniqueDeviceId_t serverId);
+    ~FrameLayer();
     
-    void runnerTask(void);
+    void sendFrameTask(FrameTask_t& taskFrame);
 
 private:
-    /* Socket Data */
-    int m_socketClient = 0;
-    int m_data_len = 0;
-    struct sockaddr_un m_remote;
+    ReceiveFrameTask_t m_receiveFrameTaskHandler;
+
+    Socket* m_socket;
+    static void processReciveData(BufferData_t data);
 };
 
 /*----------------------------------------------------------------------------*/
 /* Fin 																		  */
 /*----------------------------------------------------------------------------*/
 
-#endif // SOCKET_CLIENT_H
+#endif // FRAME_LAYER_H

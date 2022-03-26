@@ -93,11 +93,29 @@ bool GroundControl::addListTaskToDo(PermutationTaskSolver::TaskList_t& taskList)
 void GroundControl::sendSatelite1TaskList(PermutationTaskSolver::TaskList_t taskList)
 {
 	/* Hacia protocolo */
+	for (PermutationTaskSolver::TaskList_t::iterator taskIt = taskList.begin(); taskIt < taskList.end(); ++taskIt)
+	{
+		Task* task = (*taskIt);
+
+		/* Asigno la tarea al satelite mediante el protocolo */
+
+		/* Quito los recursos disponibles de ese satelite mientras este realizando la tarea */
+		m_satelite1AvailableResources->substrac(task->getResourcesList());
+	}
 }
 
 void GroundControl::sendSatelite2TaskList(PermutationTaskSolver::TaskList_t taskList)
 {
 	/* Hacia protocolo */
+	for (PermutationTaskSolver::TaskList_t::iterator taskIt = taskList.begin(); taskIt < taskList.end(); ++taskIt)
+	{
+		Task* task = (*taskIt);
+
+		/* Asigno la tarea al satelite mediante el protocolo */
+
+		/* Quito los recursos disponibles de ese satelite mientras este realizando la tarea */
+		m_satelite2AvailableResources->substrac(task->getResourcesList());
+	}
 }
 
 void GroundControl::runnerTask(void)

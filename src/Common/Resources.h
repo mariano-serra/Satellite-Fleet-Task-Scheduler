@@ -33,8 +33,8 @@ class Resources
 public:
 
 	/*! Identificador de recurso. De 0 - 65535, creo que son suficientes */
+	typedef uint8_t ResourceAmount_t;
 	typedef uint16_t ResourceElement_t;
-	typedef int16_t ResourceAmount_t;
 
 	/*! Lista de recursos */
 	typedef	std::vector<ResourceElement_t> ResourcesList_t;

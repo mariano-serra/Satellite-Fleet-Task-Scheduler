@@ -1,8 +1,10 @@
 /* ---------------------------------------------------------------------------*/
 /* Includes                                                                   */
 /* ---------------------------------------------------------------------------*/
-#include "Socket.h"
-
+#include "AppConexionLayer.h"
+#include "SharedDeclarations.h"
+#include <functional>
+#include <string>
 
 /* ---------------------------------------------------------------------------*/
 /* Debug                                                                      */
@@ -12,51 +14,46 @@
 /* Defines, Estructuras y Typedef                                             */
 /* ---------------------------------------------------------------------------*/
 
+
 /* ---------------------------------------------------------------------------*/
 /* Declaracion de funciones                                                   */
 /* ---------------------------------------------------------------------------*/
-
 
 /* ---------------------------------------------------------------------------*/
 /* Variables externas y privadas                                              */
 /* ---------------------------------------------------------------------------*/
 
-
 /* ---------------------------------------------------------------------------*/
 /* Implementacion de clases y funciones                                       */
 /* ---------------------------------------------------------------------------*/
 
-void Socket::sendData(CommunicationsBuffer_t& data)
+AppConexionLayer::AppConexionLayer(ReceiveTask_t receiveTaskHandler, Socket::SocketType sockeType, UniqueDeviceId_t serverId)
 {
-    // TODO: Agregar guarda para que el vector de transmision no supere el tañano maximo */
-    m_DataToSend.insert(m_DataToSend.end(), data.begin(), data.end());
+    m_receiveTaskHandler = receiveTaskHandler;
+    m_frameLayer = new FrameLayer(receiveFrameTask, sockeType, serverId);
 }
 
-void Socket::bufferDataProcces(void)
+AppConexionLayer::~AppConexionLayer()
 {
-    /* Recepcion */
-    int32_t data_recv = 0;
-    memset(m_recv_buf, 0, BUFFER_SIZE * sizeof(BufferData_t));
-    data_recv = recv(m_socket, m_recv_buf, BUFFER_SIZE, 0);
-    for (int32_t i = 0; i < data_recv; ++i)
-    {
-        /* Proceso datos recibidos */
-        if (m_processReciveData)
-        {
-            (*m_processReciveData)(m_recv_buf[i]);
-        }
-    }
 
-    /* Transimision */
-    std::copy(m_DataToSend.begin(), m_DataToSend.end(), m_send_buf);
-    m_DataToSend.clear();
-    if (strlen(m_send_buf))
-    {
-        if (send(m_socket, m_send_buf, strlen(m_send_buf)*sizeof(BufferData_t), 0) == -1)
-        {
-            DEBUG_MSG("Error on send() call" << std::endl);
-        }
-    }
+}
+
+void AppConexionLayer::sendTask(Task& task)
+{
+    FrameTask_t frameTask;
+    Resources::ResourcesList_t resourcesList = task.getResourcesList();
+
+    frameTask.id = task.getId();
+    frameTask.resourcesAmount = resourcesList.size();
+    std::copy(resourcesList.begin(), resourcesList.end(), frameTask.resourcesList);
+    frameTask.state = task.getState();
+
+    m_frameLayer->sendFrameTask(frameTask);
+}
+
+void AppConexionLayer::receiveFrameTask(FrameTask_t& task)
+{
+
 }
 
 

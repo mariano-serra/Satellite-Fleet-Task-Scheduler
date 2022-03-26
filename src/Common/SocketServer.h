@@ -27,7 +27,7 @@
 class SocketServer : public Socket
 {
 public:
-    SocketServer(UniqueDeviceId_t server, ProcessReciveData_t processReciveData);
+    SocketServer(UniqueDeviceId_t serverId, ProcessReciveData_t processReciveData);
     ~SocketServer();
     
     void runnerTask(void);
