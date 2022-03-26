@@ -5,13 +5,16 @@
  *  \brief [Breve descripcion del Modulo]
  */
 
-#ifndef SOCKET_SERVER_H
-#define SOCKET_SERVER_H
+#ifndef SOCKET_H
+#define SOCKET_H
 
 /* ---------------------------------------------------------------------------*/
 /* Includes 																  */
 /* ---------------------------------------------------------------------------*/
-#include "Socket.h"
+#include <stdlib.h>
+#include <sys/socket.h>
+#include <sys/un.h>
+#include "SharedDeclarations.h"
 
 /* ---------------------------------------------------------------------------*/
 /* Defines, Estructuras y Typedef Compartidos 								  */
@@ -24,34 +27,28 @@
 /*----------------------------------------------------------------------------*/
 /* Clases y Prototipos de funciones Compartidas 				              */
 /*----------------------------------------------------------------------------*/
-class SocketServer : public Socket
+class Socket
 {
 public:
-    SocketServer(UniqueDeviceId_t server, ProcessReciveData_t processReciveData);
-    ~SocketServer();
-    
-    void runnerTask(void);
-
-private:
-    /* Server Socket State */
-    typedef enum State
-    {
-        WAITING_FOR_CLIENT,
-        CONNECTED,
-        /*---*/
-        NUMBER_STATES
-    } State_t;
-    State_t m_state;
-
     /* Socket Data */
-    int m_socketServer = 0;
-    struct sockaddr_un m_local, m_remote;
-    int m_len = 0;
-    unsigned int m_sock_len = 0;
+    int m_socket = 0;
+
+    /* Metodos de recepcion y */
+    ProcessReciveData_t m_processReciveData;
+    void sendData(CommunicationsBuffer_t& bufferData);
+
+    /* Buffer de recepcion */
+    BufferData_t m_recv_buf[BUFFER_SIZE];
+    /* Buffers de transimision */
+    BufferData_t m_send_buf[BUFFER_SIZE];
+    CommunicationsBuffer_t m_DataToSend;
+
+    /* runner */
+    void bufferDataProcces(void);
 };
 
 /*----------------------------------------------------------------------------*/
 /* Fin 																		  */
 /*----------------------------------------------------------------------------*/
 
-#endif // SOCKET_SERVER_H
+#endif // SOCKET_H

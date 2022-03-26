@@ -21,7 +21,7 @@
 /* ---------------------------------------------------------------------------*/
 /* Variables externas y privadas                                              */
 /* ---------------------------------------------------------------------------*/
-static const unsigned int nIncomingConnections = 5;
+static const uint32_t nIncomingConnections = 5;
 
 /* ---------------------------------------------------------------------------*/
 /* Implementacion de clases y funciones                                       */
@@ -44,24 +44,24 @@ SocketServer::SocketServer(UniqueDeviceId_t server, ProcessReciveData_t processR
     }
 
     /* Inicializacion de Socket */
-    s = socket(AF_UNIX, SOCK_STREAM, 0);
-    if ( -1 == s )
+    m_socketServer = socket(AF_UNIX, SOCK_STREAM, 0);
+    if (-1 == m_socketServer)
     {
         DEBUG_MSG("Error on socket() call" << std::endl);
         return;
     }
 
-    local.sun_family = AF_UNIX;
-    strcpy( local.sun_path, serverName );
-    unlink(local.sun_path);
-    len = strlen(local.sun_path) + sizeof(local.sun_family);
-    if ( bind(s, (struct sockaddr*)&local, len) != 0)
+    m_local.sun_family = AF_UNIX;
+    strcpy( m_local.sun_path, serverName );
+    unlink(m_local.sun_path);
+    m_len = strlen(m_local.sun_path) + sizeof(m_local.sun_family);
+    if (bind(m_socketServer, (struct sockaddr*)&m_local, m_len) != 0)
     {
         DEBUG_MSG("Error on binding socket" << std::endl);
         return;
     }
 
-    if ( listen(s, nIncomingConnections) != 0 )
+    if (listen(m_socketServer, nIncomingConnections) != 0)
     {
         DEBUG_MSG("Error on listen call" << std::endl);
     }
@@ -76,12 +76,7 @@ SocketServer::SocketServer(UniqueDeviceId_t server, ProcessReciveData_t processR
 
 SocketServer::~SocketServer()
 {
-    close(s2);
-}
-
-void SocketServer::sendData(CommunicationsBuffer_t* data)
-{
-
+    close(m_socket);
 }
 
 void SocketServer::runnerTask(void)
@@ -90,15 +85,16 @@ void SocketServer::runnerTask(void)
     {
     case CONNECTED:
 
-        /* TODO: Leer y escribir buffers de comunicacion */
+        bufferDataProcces();
 
         break;
 
     case WAITING_FOR_CLIENT:
 
-        sock_len = 0;
         DEBUG_MSG("Waiting for connection...." << std::endl);
-        if ( (s2 = accept(s, (struct sockaddr*)&remote, &sock_len)) == -1 )
+        m_sock_len = 0;
+        m_socket = accept(m_socketServer, (struct sockaddr*)&m_remote, &m_sock_len);
+        if ( m_socket == -1 )
         {
             DEBUG_MSG("Error on accept() call" << std::endl);
             return;
@@ -111,11 +107,6 @@ void SocketServer::runnerTask(void)
     default:
         break;
     }
-}
-
-void SocketServer::processReciveData(CommunicationsBuffer_t* data)
-{
-
 }
 
 /*----------------------------------------------------------------------------*/

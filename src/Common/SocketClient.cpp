@@ -44,18 +44,18 @@ SocketClient::SocketClient(UniqueDeviceId_t server, ProcessReciveData_t processR
     }
 
     /* Inicializacion de Socket */
-    if ( (sock = socket(AF_UNIX, SOCK_STREAM, 0)) == -1  )
+    if ((m_socketClient = socket(AF_UNIX, SOCK_STREAM, 0)) == -1)
     {
         DEBUG_MSG("Client: Error on socket() call" << std::endl);
         return;
     }
 
-    remote.sun_family = AF_UNIX;
-    strcpy( remote.sun_path, serverName );
-    data_len = strlen(remote.sun_path) + sizeof(remote.sun_family);
+    m_remote.sun_family = AF_UNIX;
+    strcpy( m_remote.sun_path, serverName );
+    m_data_len = strlen(m_remote.sun_path) + sizeof(m_remote.sun_family);
 
     DEBUG_MSG("Client: Trying to connect..." << std::endl);
-    if ( connect(sock, (struct sockaddr*)&remote, data_len) == -1 )
+    if (connect(m_socketClient, (struct sockaddr*)&m_remote, m_data_len) == -1)
     {
         DEBUG_MSG("Client: Error on connect call" << std::endl);
         return;
@@ -63,6 +63,8 @@ SocketClient::SocketClient(UniqueDeviceId_t server, ProcessReciveData_t processR
 
     DEBUG_MSG("Client: Connected" << std::endl);
 
+    /* Handler de recepcion */
+    m_processReciveData = processReciveData;
 }
 
 SocketClient::~SocketClient()
@@ -70,25 +72,9 @@ SocketClient::~SocketClient()
 
 }
 
-void SocketClient::sendData(CommunicationsBuffer_t* data)
-{
-
-}
-
 void SocketClient::runnerTask(void)
 {
-    /* Vaciar buffer de transmision*/
-    // n = write( newsockfd, "Obtuve su mensaje", 18 );
-
-    // memset( buffer, '\0', MAX_BUFFER_SIZE );
-    /* Leer y procesar buffer de recepcion */
-    // n = read( sockfd, buffer, MAX_BUFFER_SIZE - 1 );
-    // processReciveData()
-}
-
-void SocketClient::processReciveData(CommunicationsBuffer_t* data)
-{
-
+    bufferDataProcces();
 }
 
 /*----------------------------------------------------------------------------*/

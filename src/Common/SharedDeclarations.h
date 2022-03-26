@@ -29,9 +29,14 @@ static const UniqueDeviceId_t NUM_DEVICES_ID = 3;
 static const Resources::ResourcesList_t SATELITE_1_RES = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 static const Resources::ResourcesList_t SATELITE_2_RES = {1, 2, 3, 5, 5, 6, 7, 8, 10};
 
+/* Sockets */
+#define BUFFER_SIZE (200)
+typedef char BufferData_t;
+typedef std::vector<BufferData_t> CommunicationsBuffer_t;
+typedef void (*ProcessReciveData_t)(BufferData_t data);
 
-typedef std::vector<uint8_t> CommunicationsBuffer_t;
 
+/* Message Commands */
 typedef enum
 {
     UPDATE_AVAILABLE_RESOURCES,

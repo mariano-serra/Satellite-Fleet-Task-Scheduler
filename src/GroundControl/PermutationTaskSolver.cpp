@@ -1,7 +1,6 @@
 /* ---------------------------------------------------------------------------*/
 /* Includes                                                                   */
 /* ---------------------------------------------------------------------------*/
-#include <iostream>
 #include <algorithm>
 #include "PermutationTaskSolver.h"
 #include "Utilities.h"

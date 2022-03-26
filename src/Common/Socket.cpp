@@ -1,10 +1,8 @@
 /* ---------------------------------------------------------------------------*/
 /* Includes                                                                   */
 /* ---------------------------------------------------------------------------*/
-#include <string>
-#include <sstream>
-#include "GroundControl.h"
-#include "SocketClient.h"
+#include "Socket.h"
+
 
 /* ---------------------------------------------------------------------------*/
 /* Debug                                                                      */
@@ -28,31 +26,39 @@
 /* Implementacion de clases y funciones                                       */
 /* ---------------------------------------------------------------------------*/
 
-int main(int argc, char **argv)
+void Socket::sendData(CommunicationsBuffer_t& data)
 {
-    std::cout << "Start Ground Control" << std::endl;
+    // TODO: Agregar guarda para que el vector de transmision no supere el tañano maximo */
+    m_DataToSend.insert(m_DataToSend.end(), data.begin(), data.end());
+}
 
-    GroundControl *groundControl = new GroundControl(GROUND_CONTROL_ID);
-
-    /* Create Meassege Broker (Observer Pattern!) */
-    SocketClient* clientSatelite1 = new SocketClient(SATELITE_1_ID, NULL);
-    SocketClient* clientSatelite2 = new SocketClient(SATELITE_2_ID, NULL);
-
-    /* SCHEDULER */
-    while(true)
+void Socket::bufferDataProcces(void)
+{
+    /* Recepcion */
+    int32_t data_recv = 0;
+    memset(m_recv_buf, 0, BUFFER_SIZE * sizeof(BufferData_t));
+    data_recv = recv(m_socket, m_recv_buf, BUFFER_SIZE, 0);
+    for (int32_t i = 0; i < data_recv; ++i)
     {
-        /* Socket Runner */
-        clientSatelite1->runnerTask();
-        clientSatelite2->runnerTask();
-
-        /* Task  Runner */
-        groundControl->runnerTask();
-
-        // TODO: Add MessageBroker.runnerTask();
+        /* Proceso datos recibidos */
+        if (m_processReciveData)
+        {
+            (*m_processReciveData)(m_recv_buf[i]);
+        }
     }
 
-    return 0;
+    /* Transimision */
+    std::copy(std::begin(m_DataToSend), std::end(m_DataToSend), m_send_buf);
+    m_DataToSend.clear();
+    if (strlen(m_send_buf))
+    {
+        if (send(m_socket, m_send_buf, strlen(m_send_buf)*sizeof(BufferData_t), 0) == -1)
+        {
+            DEBUG_MSG("Error on send() call" << std::endl);
+        }
+    }
 }
+
 
 /*----------------------------------------------------------------------------*/
 /* Fin                                                                        */
