@@ -84,7 +84,7 @@ void PermutationTaskSolver::makeTaskPermutatioMatrix(TaskList_t& taskList)
 
         m_devicePermutationMatrix.push_back(deviceVector);
         
-        DEBUG_MSG("Permutation:\t" << permutation  << "\t- Devices:\t" << deviceVector);
+        // DEBUG_MSG("Permutation:\t" << permutation  << "\t- Devices:\t" << deviceVector);
 
         /*  TaskList Permutation Matrix*/
         uint32_t taskIndex = 0;
@@ -102,7 +102,7 @@ void PermutationTaskSolver::makeTaskPermutatioMatrix(TaskList_t& taskList)
         /* Payoff Vector
          *  Se utiliza el GROUND_CONTROL_ID, como indice de las tareas que no pueden ser asignadas a los satelites,
          *  por falta de recursos. */
-        DEBUG_MSG("\t- Non Assigned TaskIdList:\t" << taskIdListVector[GROUND_CONTROL_ID]);
+        // DEBUG_MSG("\t- Non Assigned TaskIdList:\t" << taskIdListVector[GROUND_CONTROL_ID]);
         TaskList_t unassignedTaskList = taskListVector[GROUND_CONTROL_ID];
         Task::Payoff_t unassignedTaskPayoff = 0;
 
@@ -113,7 +113,7 @@ void PermutationTaskSolver::makeTaskPermutatioMatrix(TaskList_t& taskList)
         }
         m_assignTaskPayoffVector.push_back(maxPayoff - unassignedTaskPayoff);
         
-        DEBUG_MSG("\t- Payoff:\t" << m_assignTaskPayoffVector[permutation] << std::endl);
+        // DEBUG_MSG("\t- Payoff:\t" << m_assignTaskPayoffVector[permutation] << std::endl);
 
         /* Permutation Vector */
         m_permutationVector.push_back(permutation);
@@ -129,7 +129,7 @@ void PermutationTaskSolver::sortTaskPermutatioMatrixByPayoff(void)
     std::sort(m_permutationVector.begin(), m_permutationVector.end(), 
               [&](const int& a, const int& b) {return (m_assignTaskPayoffVector[a] > m_assignTaskPayoffVector[b]);}); /* FIXME: definir afuera, si es posible */
 
-    DEBUG_MSG("Sorted Payoff Permutation Verctor:\t" << m_permutationVector << std::endl);
+    // DEBUG_MSG("Sorted Payoff Permutation Verctor:\t" << m_permutationVector << std::endl);
 }
 
 bool PermutationTaskSolver::validateTaskPermutatioMatrix(Resources& satelite1Resources, Resources& satelite2Resources, 
@@ -147,7 +147,7 @@ bool PermutationTaskSolver::validateTaskPermutatioMatrix(Resources& satelite1Res
         
         permutation = (*permutationIt);
 
-        DEBUG_MSG("Permutation:\t" << permutation << std::endl);
+        // DEBUG_MSG("Permutation:\t" << permutation << std::endl);
 
         /* Resources - Agrupo recursos de todas las tareas asociadas a un mismo device_id  */
         UniqueDeviceId_t deviceIndex = GROUND_CONTROL_ID;
@@ -156,7 +156,7 @@ bool PermutationTaskSolver::validateTaskPermutatioMatrix(Resources& satelite1Res
         for (TaskListVector_t::iterator taskListIt = taskListVector.begin(); taskListIt < taskListVector.end(); ++taskListIt)
         {
             TaskList_t taskList = (*taskListIt);
-            DEBUG_MSG("\tDeviceId\t" << deviceIndex << "\t- TaskList:\t" << taskList);
+            // DEBUG_MSG("\tDeviceId\t" << deviceIndex << "\t- TaskList:\t" << taskList);
 
             Resources::ResourcesList_t resourcesList;
             for (TaskList_t::iterator taskIt = taskList.begin(); taskIt < taskList.end(); ++taskIt)
@@ -167,17 +167,17 @@ bool PermutationTaskSolver::validateTaskPermutatioMatrix(Resources& satelite1Res
                 resourcesList.insert(resourcesList.end(), resourcesListTask.begin(), resourcesListTask.end());
 
             }
-            DEBUG_MSG("\t- ResourcesList:\t" << resourcesList);
+            // DEBUG_MSG("\t- ResourcesList:\t" << resourcesList);
             m_resourcesListVector.push_back(resourcesList);      
 
-            DEBUG_MSG(resourcesList << std::endl);
+            // DEBUG_MSG(resourcesList << std::endl);
 
             /* ++ */
             ++deviceIndex;
         }
 
         continueFlag = !(satelite1Resources.contains(m_resourcesListVector[SATELITE_1_ID]) && (satelite2Resources.contains(m_resourcesListVector[SATELITE_2_ID])));
-        DEBUG_MSG("\t- Valid?:\t" << !continueFlag << std::endl);
+        // DEBUG_MSG("\t- Valid?:\t" << !continueFlag << std::endl);
     }
 
     if (continueFlag == false)
