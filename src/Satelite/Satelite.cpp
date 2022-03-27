@@ -64,25 +64,13 @@ bool Satelite::addTaskToDo(Task* task)
     {
         /* Asigna la tarea a la lista de pendientes */
         m_ongoingTasks[task] = FakeTaskTime();
-        setTaskState(task, Task::IN_EXECUTION);
+        task->setState(Task::IN_EXECUTION);
 
         /* Reserva los recursos necesarios */
         m_availableResources->substrac(task->getResourcesList());
     }
 
     return ret;
-}
-
-void Satelite::setTaskState(Task* task, Task::State_t state)
-{
-    task->setState(state);
-    /* Enviar estado a estacion terrena */
-    if (m_appConexionLayer)
-    {
-        m_appConexionLayer->sendTask(task);
-    }
-    DEBUG_MSG("END Task: Id=" << task->getId() << " - State=" << task->getState());
-    delete(task);
 }
 
 void Satelite::runnerTask(void)
@@ -93,27 +81,33 @@ void Satelite::runnerTask(void)
         Task* newTask;
         if (m_appConexionLayer->receiveTask(&newTask))
         {
-            DEBUG_MSG("NEW Task: Id=" << newTask->getId());
+            DEBUG_MSG(">> new Task() = " << newTask << std::endl);
             addTaskToDo(newTask); 
         }
     }
 
     /* Run Satelite Task List */
-    for (TaskMap_t::iterator ongoingTask = m_ongoingTasks.begin(); ongoingTask != m_ongoingTasks.end(); ++ongoingTask)
+    for (TaskMap_t::iterator ongoingTaskIt = m_ongoingTasks.begin(); ongoingTaskIt != m_ongoingTasks.end(); ++ongoingTaskIt)
     {
-        Task* task = ongoingTask->first;
-        TaskTime_t* time = &(ongoingTask->second);
+        Task* task = ongoingTaskIt->first;
+        TaskTime_t* time = &(ongoingTaskIt->second);
         (*time) = (*time) - 1;
 
         if (*time < 0)
         {
             if (FakeTaskSuccess())
             {
-                setTaskState(task, Task::EXECUTED);
+                task->setState(Task::EXECUTED);
             }
             else
             {
-                setTaskState(task, Task::FAILURE_DURING_EXECUTION);   
+                task->setState(Task::FAILURE_DURING_EXECUTION);
+            }
+
+            /* Enviar tarea a estacion terrena con estado actualizado */
+            if (m_appConexionLayer)
+            {
+                m_appConexionLayer->sendTask(task);
             }
 
             /* Libera los recursos */
@@ -121,7 +115,9 @@ void Satelite::runnerTask(void)
 
             /* Borra tarea a la lista de pendientes */
             /* FIXME: ver si la puede borrar dentro del iterador */
-            m_ongoingTasks.erase(task);  //sino generar lista de tasks a borrar
+            ongoingTaskIt = m_ongoingTasks.erase(ongoingTaskIt);  //sino generar lista de tasks a borrar
+
+            delete(task);
         }
     }
 }

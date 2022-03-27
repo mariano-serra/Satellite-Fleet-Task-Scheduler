@@ -46,10 +46,6 @@ public:
     virtual TaskTime_t FakeTaskTime(void);
 
 private:
-    // No se todavia como va a ser la interfaz hacia el proxy. 
-    // Cada entidad se va a tener que registrar como observer y generador de eventos
-    void setTaskState(Task* task, Task::State_t state);
-
     UniqueDeviceId_t m_sateliteId;
     Resources *m_hardwareResources; // Bakup
     Resources *m_availableResources;

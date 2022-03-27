@@ -44,7 +44,7 @@ int main(int argc, char **argv)
     taskList.push_back(&task1);
 
     Task task2("task2", {1,5,5,7}, 3.33f);
-    // taskList.push_back(&task2);
+    taskList.push_back(&task2);
     
     groundControl->addListTaskToDo(taskList);
 
