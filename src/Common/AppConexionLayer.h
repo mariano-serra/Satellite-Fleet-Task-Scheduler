@@ -16,7 +16,7 @@
 /* ---------------------------------------------------------------------------*/
 /* Defines, Estructuras y Typedef Compartidos 								  */
 /* ---------------------------------------------------------------------------*/
-typedef void (*ReceiveTask_t)(Task& task);
+
 
 /*----------------------------------------------------------------------------*/
 /* Variables Compartidas                                                      */
@@ -29,18 +29,16 @@ typedef void (*ReceiveTask_t)(Task& task);
 class AppConexionLayer
 {
 public:
-    AppConexionLayer(ReceiveTask_t receiveTaskHandler, Socket::SocketType sockeType, UniqueDeviceId_t serverId);
+    AppConexionLayer(Socket::SocketType sockeType, UniqueDeviceId_t serverId);
     ~AppConexionLayer();
     
-    void sendTask(Task& task);
+    void sendTask(Task* task);
+    bool receiveTask(Task* task);
+
     void runnerTask(void);
     
 private:
-    ReceiveTask_t m_receiveTaskHandler;
-
     FrameLayer* m_frameLayer;
-    static void receiveFrameTask(FrameTask_t& task);
-
 };
 
 /*----------------------------------------------------------------------------*/

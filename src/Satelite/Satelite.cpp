@@ -79,7 +79,7 @@ void Satelite::setTaskState(Task* task, Task::State_t state)
     /* Enviar estado a estacion terrena */
     if (m_appConexionLayer)
     {
-        m_appConexionLayer->sendTask((*task));
+        m_appConexionLayer->sendTask(task);
     }
 }
 

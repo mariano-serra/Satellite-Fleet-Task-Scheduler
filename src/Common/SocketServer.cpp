@@ -28,7 +28,7 @@ static const uint32_t nIncomingConnections = 5;
 /* ---------------------------------------------------------------------------*/
 
 
-SocketServer::SocketServer(UniqueDeviceId_t serverId, ProcessReciveData_t processReciveData) : Socket()
+SocketServer::SocketServer(UniqueDeviceId_t serverId)
 {
     /* Defino nombre de Server */
     char sat1ServerName[] = "SAT1_SERVER";
@@ -72,9 +72,6 @@ SocketServer::SocketServer(UniqueDeviceId_t serverId, ProcessReciveData_t proces
     tv.tv_usec = 0;
     setsockopt(m_socketServer, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
 
-    /* Handler de recepcion */
-    m_processReciveData = processReciveData;
-
     /* Estado */
     m_state = WAITING_FOR_CLIENT;
     DEBUG_MSG("WAITING_FOR_CLIENT" << std::endl);
@@ -87,12 +84,11 @@ SocketServer::~SocketServer()
 
 void SocketServer::runnerTask(void)
 {
-    DEBUG_MSG("SocketServer::runnerTask" << std::endl);
     switch (m_state)
     {
     case CONNECTED:
 
-        bufferDataProcces();
+        /* Do Nothing */
 
         break;
 

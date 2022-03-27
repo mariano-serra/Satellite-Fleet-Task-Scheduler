@@ -27,10 +27,8 @@
 class SocketClient : public Socket
 {
 public:
-    SocketClient(UniqueDeviceId_t serverId, ProcessReciveData_t processReciveData);
+    SocketClient(UniqueDeviceId_t serverId);
     ~SocketClient();
-    
-    void runnerTask(void);
 
 private:
     /* Socket Data */

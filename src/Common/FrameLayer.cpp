@@ -27,18 +27,17 @@ static const FrameId_t UnitqueTaskFrameId = 0x14F6FE0C; /* Hash */
 /* Implementacion de clases y funciones                                       */
 /* ---------------------------------------------------------------------------*/
 
-FrameLayer::FrameLayer(ReceiveFrameTask_t receiveFrameTaskHandler, Socket::SocketType sockeType, UniqueDeviceId_t serverId)
+FrameLayer::FrameLayer(Socket::SocketType sockeType, UniqueDeviceId_t serverId)
 {
-    m_receiveFrameTaskHandler = receiveFrameTaskHandler;
     m_sockeType = sockeType;
 
     if (m_sockeType == Socket::SERVER)
     {
-        m_socketServer = new SocketServer(serverId, processReciveData);
+        m_socketServer = new SocketServer(serverId);
     }
     else if (m_sockeType == Socket::CLIENT)
     {
-        m_socketClient = new SocketClient(serverId, processReciveData);
+        m_socketClient = new SocketClient(serverId);
     }
 }
 
@@ -47,9 +46,9 @@ FrameLayer::~FrameLayer()
 
 }
 
-void FrameLayer::sendFrameTask(FrameTask_t& taskFrame)
+void FrameLayer::sendFrameTask(FrameTask_t* taskFrame)
 {
-    taskFrame.frameId = UnitqueTaskFrameId;
+    taskFrame->frameId = UnitqueTaskFrameId;
 
     BufferData_t* bufferData = reinterpret_cast<BufferData_t*>(&taskFrame);
 
@@ -63,36 +62,38 @@ void FrameLayer::sendFrameTask(FrameTask_t& taskFrame)
     }
 }
 
+bool FrameLayer::receiveFrameTask(FrameTask_t* taskFrame)
+{
+    bool ret;
+
+    BufferData_t* bufferData = reinterpret_cast<BufferData_t*>(&taskFrame);
+
+    if (m_sockeType == Socket::SERVER)
+    {
+        ret = m_socketServer->receiveData(bufferData, sizeof(FrameTask_t));
+    }
+    else if (m_sockeType == Socket::CLIENT)
+    {
+        ret = m_socketClient->receiveData(bufferData, sizeof(FrameTask_t));
+    }
+
+    if (ret)
+    {   
+        ret = (taskFrame->frameId == UnitqueTaskFrameId);
+    }
+
+    return ret;
+}
+
+
 void FrameLayer::runnerTask(void)
 {
     if (m_sockeType == Socket::SERVER)
     {
         m_socketServer->runnerTask();
     }
-    else if (m_sockeType == Socket::CLIENT)
-    {
-        m_socketClient->runnerTask();
-    }
 }
 
-void FrameLayer::processReciveData(BufferData_t* bufferData, size_t bufferSize)
-{
-    FrameTask_t* taskFrame = reinterpret_cast<FrameTask_t*>(bufferData);
-
-    DEBUG_MSG("FrameLayer::processReciveData() - frameId:");
-    if (taskFrame->frameId == UnitqueTaskFrameId)
-    {
-        DEBUG_MSG("OK!" << std::endl);
-        //if (this->m_receiveFrameTaskHandler)
-        //{
-        //    (*this->m_receiveFrameTaskHandler)((*taskFrame));
-        //}
-    }
-    else
-    {
-        DEBUG_MSG("NOK!" << std::endl);
-    }
-}
 
 /*----------------------------------------------------------------------------*/
 /* Fin                                                                        */

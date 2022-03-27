@@ -32,7 +32,7 @@ int main(int argc, char **argv)
     std::cout << "Start Ground Control" << std::endl;
 
     /* Create Meassege Broker (Observer Pattern!) */
-    AppConexionLayer* satelite1AppConexionLayer = new AppConexionLayer(NULL, Socket::SocketType::CLIENT, SATELITE_1_ID);
+    AppConexionLayer* satelite1AppConexionLayer = new AppConexionLayer(Socket::SocketType::CLIENT, SATELITE_1_ID);
     // AppConexionLayer* satelite2AppConexionLayer = new AppConexionLayer(NULL, Socket::SocketType::CLIENT, SATELITE_2_ID);
 
     GroundControl *groundControl = new GroundControl(GROUND_CONTROL_ID, satelite1AppConexionLayer, NULL);

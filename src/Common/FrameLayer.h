@@ -25,12 +25,11 @@ typedef struct FrameTask
 {
     FrameId_t frameId;           /* Like a SOF */
     Task::TaskId_t taskId;
+    Task::Payoff_t payoff;
     Resources::ResourceAmount_t resourcesAmount;
     Resources::ResourceElement_t resourcesList[256];
     Task::State_t state;
 }FrameTask_t;
-
-typedef void (*ReceiveFrameTask_t)(FrameTask_t& frameTask);
 
 /*----------------------------------------------------------------------------*/
 /* Variables Compartidas                                                      */
@@ -43,20 +42,18 @@ class FrameLayer
 {
 public:
 
-    FrameLayer(ReceiveFrameTask_t receiveFrameTaskHandler, Socket::SocketType sockeType, UniqueDeviceId_t serverId);
+    FrameLayer(Socket::SocketType sockeType, UniqueDeviceId_t serverId);
     ~FrameLayer();
     
-    void sendFrameTask(FrameTask_t& taskFrame);
+    void sendFrameTask(FrameTask_t* taskFrame);
+    bool receiveFrameTask(FrameTask_t* taskFrame);
+
     void runnerTask(void);
 
 private:
-    ReceiveFrameTask_t m_receiveFrameTaskHandler;
-
-    /* Workaround */
     Socket::SocketType m_sockeType;
     SocketServer* m_socketServer;
     SocketClient* m_socketClient;
-    static void processReciveData(BufferData_t* bufferData, size_t bufferSize);
 };
 
 /*----------------------------------------------------------------------------*/

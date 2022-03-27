@@ -103,7 +103,7 @@ void GroundControl::sendSatelite1TaskList(PermutationTaskSolver::TaskList_t task
 		/* Asigno la tarea al satelite mediante el protocolo */
 		if (m_satelite1AppConexionLayer)
 		{
-			m_satelite1AppConexionLayer->sendTask((*task));
+			m_satelite1AppConexionLayer->sendTask(task);
 		}
 
 		/* Quito los recursos disponibles de ese satelite mientras este realizando la tarea */
@@ -121,7 +121,7 @@ void GroundControl::sendSatelite2TaskList(PermutationTaskSolver::TaskList_t task
 		/* Asigno la tarea al satelite mediante el protocolo */
 		if (m_satelite2AppConexionLayer)
 		{
-			m_satelite2AppConexionLayer->sendTask((*task));
+			m_satelite2AppConexionLayer->sendTask(task);
 		}
 
 		/* Quito los recursos disponibles de ese satelite mientras este realizando la tarea */

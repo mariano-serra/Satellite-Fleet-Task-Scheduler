@@ -27,10 +27,9 @@
 /* Implementacion de clases y funciones                                       */
 /* ---------------------------------------------------------------------------*/
 
-AppConexionLayer::AppConexionLayer(ReceiveTask_t receiveTaskHandler, Socket::SocketType sockeType, UniqueDeviceId_t serverId)
+AppConexionLayer::AppConexionLayer(Socket::SocketType sockeType, UniqueDeviceId_t serverId)
 {
-    m_receiveTaskHandler = receiveTaskHandler;
-    m_frameLayer = new FrameLayer(receiveFrameTask, sockeType, serverId);
+    m_frameLayer = new FrameLayer(sockeType, serverId);
 }
 
 AppConexionLayer::~AppConexionLayer()
@@ -38,18 +37,47 @@ AppConexionLayer::~AppConexionLayer()
 
 }
 
-void AppConexionLayer::sendTask(Task& task)
+void AppConexionLayer::sendTask(Task* task)
 {
     FrameTask_t frameTask;
-    Resources::ResourcesList_t resourcesList = task.getResourcesList();
+    Resources::ResourcesList_t resourcesList = task->getResourcesList();
 
-    frameTask.taskId = task.getId();
+    frameTask.taskId = task->getId();
+
+    frameTask.payoff = task->getPayoff();
+
     frameTask.resourcesAmount = resourcesList.size();
     std::copy(resourcesList.begin(), resourcesList.end(), frameTask.resourcesList);
-    frameTask.state = task.getState();
 
-    m_frameLayer->sendFrameTask(frameTask);
+    frameTask.state = task->getState();
+
+    m_frameLayer->sendFrameTask(&frameTask);
 }
+
+bool AppConexionLayer::receiveTask(Task* task)
+{
+    bool ret = false;
+    FrameTask_t frameTask;
+
+    ret = m_frameLayer->receiveFrameTask(&frameTask);
+
+    if (ret)
+    {
+        Task::TaskId_t id = frameTask.taskId;
+        std::string name = "task";  // No me importa, no lo recibo ni lo transmito
+
+        Resources::ResourceAmount_t resourcesAmount = frameTask.resourcesAmount;
+        Resources::ResourcesList_t resourcesList;
+        std::copy(frameTask.resourcesList, frameTask.resourcesList + resourcesAmount, resourcesList.begin());
+        
+        Task::Payoff_t payoff = frameTask.payoff;
+
+        task = new Task(id, name, resourcesList, payoff);
+    }
+
+    return ret;  
+}
+
 
 
 void AppConexionLayer::runnerTask(void)
@@ -57,10 +85,6 @@ void AppConexionLayer::runnerTask(void)
     m_frameLayer->runnerTask();
 }
 
-void AppConexionLayer::receiveFrameTask(FrameTask_t& task)
-{
-
-}
 
 
 /*----------------------------------------------------------------------------*/

@@ -59,7 +59,7 @@ int main(int argc, char **argv)
     if (validArgument)
     {
         /* AppConexionLayer */
-        AppConexionLayer* appConexionLayer = new AppConexionLayer(NULL, Socket::SocketType::SERVER, sateliteId);
+        AppConexionLayer* appConexionLayer = new AppConexionLayer(Socket::SocketType::SERVER, sateliteId);
 
         /* Satelite */
         Satelite* satelite = new Satelite(sateliteId, sateliteResourcesList, appConexionLayer);

@@ -28,7 +28,7 @@
 /* ---------------------------------------------------------------------------*/
 
 
-SocketClient::SocketClient(UniqueDeviceId_t serverId, ProcessReciveData_t processReciveData) : Socket()
+SocketClient::SocketClient(UniqueDeviceId_t serverId)
 {
     /* Defino nombre de Server */
     char sat1ServerName[] = "../../Satelite/main/SAT1_SERVER";
@@ -71,20 +71,11 @@ SocketClient::SocketClient(UniqueDeviceId_t serverId, ProcessReciveData_t proces
     m_socket = m_socketClient;
 
     DEBUG_MSG("Client: Connected" << std::endl);
-
-    /* Handler de recepcion */
-    m_processReciveData = processReciveData;
 }
 
 SocketClient::~SocketClient()
 {
 
-}
-
-void SocketClient::runnerTask(void)
-{
-    DEBUG_MSG("SocketClient::runnerTask" << std::endl);
-    bufferDataProcces();
 }
 
 /*----------------------------------------------------------------------------*/
