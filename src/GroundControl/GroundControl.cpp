@@ -58,10 +58,20 @@ GroundControl::~GroundControl()
 	delete(m_satelite2AvailableResources);
 }
 
+void GroundControl::ProcessToDoTaskList(void)
+{
+	/* Sort */
+	sortToDoTaskListByPayoff();
+
+	/* Trim */
+	calcBestToDoTaskList();
+	
+	/* Solver */
+	solveToDoTaskList();
+}
+
 bool GroundControl::addListTaskToDo(Task::TaskList_t& taskList)
 {
-
-	DEBUG_MSG("TaskList:\t" << taskList << std::endl);
 
 	for (Task::TaskList_t::iterator taskIt = taskList.begin(); taskIt < taskList.end(); ++taskIt)
 	{
@@ -76,19 +86,7 @@ bool GroundControl::addListTaskToDo(Task::TaskList_t& taskList)
 		}
 	}
 
-	DEBUG_MSG("TodoTaskList:\t" << m_TodoTaskList << std::endl);
-
-	/* Process Task List */
-	sortTodoTaskListByPayoff();
-
-	DEBUG_MSG("Sorted TodoTaskList:\t" << m_TodoTaskList << std::endl);
-	
-	calcBestTodoTaskList();
-
-	DEBUG_MSG("Trim TodoTaskList:\t" << m_TodoTaskList << std::endl);
-
-	/* Solver */
-	processTaskListToDo();
+	ProcessToDoTaskList();
 
 	return true;
 }
@@ -155,6 +153,8 @@ void GroundControl::updateSatelite2TaskState(Task* task)
 
 void GroundControl::updateTaskState(void)
 {
+	bool newResourcesAvailable = false;
+
     /* Get new Task ToDo */
     if (m_satelite1AppConexionLayer)
     {
@@ -162,6 +162,7 @@ void GroundControl::updateTaskState(void)
         if (m_satelite1AppConexionLayer->receiveTask(&newTask))
         {
             updateSatelite1TaskState(newTask);
+            newResourcesAvailable = true;
         }
     }
 
@@ -172,7 +173,13 @@ void GroundControl::updateTaskState(void)
         if (m_satelite2AppConexionLayer->receiveTask(&newTask))
         {
             updateSatelite2TaskState(newTask);
+            newResourcesAvailable = true;
         }
+    }
+
+    if (newResourcesAvailable)
+    {
+    	ProcessToDoTaskList();
     }
 }
 
@@ -191,7 +198,7 @@ bool GroundControl::validateTaskOverHardwareResources(Task& task)
     return ret;
 }
 
-void GroundControl::sortTodoTaskListByPayoff(void)
+void GroundControl::sortToDoTaskListByPayoff(void)
 {
 	typedef Task* TaskPtr_t;
 
@@ -200,7 +207,7 @@ void GroundControl::sortTodoTaskListByPayoff(void)
 
 }
 
-void GroundControl::calcBestTodoTaskList(void)
+void GroundControl::calcBestToDoTaskList(void)
 {
 	Task::TaskList_t::iterator initTaskIt = m_TodoTaskList.begin();
 	Task::TaskList_t::iterator endTaskIt = m_TodoTaskList.end();
@@ -215,23 +222,25 @@ void GroundControl::calcBestTodoTaskList(void)
 	m_TodoTaskList.erase(initTaskIt, endTaskIt);
 }
 
-void GroundControl::processTaskListToDo(void)
+void GroundControl::solveToDoTaskList(void)
 {
-	m_UnassignedTaskList.clear();
-	m_Satelite1TaskList.clear();
-	m_Satelite2TaskList.clear();
+	if (m_BestTodoTaskList.size() > 0)
+	{
+		m_UnassignedTaskList.clear();
+		m_Satelite1TaskList.clear();
+		m_Satelite2TaskList.clear();
 
-	PermutationTaskSolver::initPermutatioMatrix();
-	PermutationTaskSolver::makeTaskPermutatioMatrix(m_BestTodoTaskList);
-	PermutationTaskSolver::sortTaskPermutatioMatrixByPayoff();
-	PermutationTaskSolver::validateTaskPermutatioMatrix(*m_satelite1AvailableResources, *m_satelite2AvailableResources,
-													    m_UnassignedTaskList, m_Satelite1TaskList, m_Satelite2TaskList);
-	
-	sendSatelite1TaskList(m_Satelite1TaskList);
-	sendSatelite2TaskList(m_Satelite2TaskList);
+		PermutationTaskSolver::initPermutatioMatrix();
+		PermutationTaskSolver::makeTaskPermutatioMatrix(m_BestTodoTaskList);
+		PermutationTaskSolver::sortTaskPermutatioMatrixByPayoff();
+		PermutationTaskSolver::validateTaskPermutatioMatrix(*m_satelite1AvailableResources, *m_satelite2AvailableResources,
+														    m_UnassignedTaskList, m_Satelite1TaskList, m_Satelite2TaskList);
+		
+		sendSatelite1TaskList(m_Satelite1TaskList);
+		sendSatelite2TaskList(m_Satelite2TaskList);
 
-	m_TodoTaskList.insert(m_TodoTaskList.end(), m_UnassignedTaskList.begin(), m_UnassignedTaskList.end());
-	sortTodoTaskListByPayoff();
+		m_TodoTaskList.insert(m_TodoTaskList.end(), m_UnassignedTaskList.begin(), m_UnassignedTaskList.end());
+	}
 }
 
 

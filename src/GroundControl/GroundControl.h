@@ -39,9 +39,8 @@ public:
     virtual void sendSatelite1TaskList(Task::TaskList_t taskList);
     virtual void sendSatelite2TaskList(Task::TaskList_t taskList);
 
-    void updateSatelite1TaskState(Task* task);
-    void updateSatelite2TaskState(Task* task);
-    void updateTaskState(void);
+    virtual void updateSatelite1TaskState(Task* task);
+    virtual void updateSatelite2TaskState(Task* task);
 
     void runnerTask(void);
 
@@ -70,11 +69,13 @@ private:
     typedef std::map<Task::TaskId_t, Task*> TaskMap_t;
     TaskMap_t m_taskMap;
 
-    bool validateTaskOverHardwareResources(Task& task);
-    void sortTodoTaskListByPayoff(void);
-    void calcBestTodoTaskList(void);
+    void ProcessToDoTaskList(void);
+    void sortToDoTaskListByPayoff(void);
+    void calcBestToDoTaskList(void);
+    void solveToDoTaskList(void);
+    void updateTaskState(void);
 
-    void processTaskListToDo(void);
+    bool validateTaskOverHardwareResources(Task& task);
 
     AppConexionLayer* m_satelite1AppConexionLayer;
     AppConexionLayer* m_satelite2AppConexionLayer;
