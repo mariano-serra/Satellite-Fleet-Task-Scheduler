@@ -63,7 +63,11 @@ bool Satelite::addTaskToDo(Task* task)
     if (ret)
     {
         /* Asigna la tarea a la lista de pendientes */
-        m_ongoingTasks[task] = FakeTaskTime();
+        TaskData_t taskData;
+        taskData.task = task;
+        taskData.time = FakeTaskTime();
+        m_ongoingTasks[task->getId()] = taskData;
+
         task->setState(Task::IN_EXECUTION);
 
         /* Reserva los recursos necesarios */
@@ -82,18 +86,19 @@ void Satelite::runnerTask(void)
         if (m_appConexionLayer->receiveTask(&newTask))
         {
             DEBUG_MSG(">> new Task() = " << newTask << std::endl);
-            addTaskToDo(newTask); 
+            addTaskToDo(newTask);
         }
     }
 
     /* Run Satelite Task List */
     for (TaskMap_t::iterator ongoingTaskIt = m_ongoingTasks.begin(); ongoingTaskIt != m_ongoingTasks.end(); ++ongoingTaskIt)
     {
-        Task* task = ongoingTaskIt->first;
-        TaskTime_t* time = &(ongoingTaskIt->second);
-        (*time) = (*time) - 1;
+        Task::TaskId_t taskId = ongoingTaskIt->first;
+        TaskData_t* taskData = &(ongoingTaskIt->second);
+        Task* task = taskData->task;
 
-        if (*time < 0)
+        (taskData->time)--;
+        if (taskData->time < 0)
         {
             if (FakeTaskSuccess())
             {
@@ -114,8 +119,7 @@ void Satelite::runnerTask(void)
             m_availableResources->add(task->getResourcesList());
 
             /* Borra tarea a la lista de pendientes */
-            /* FIXME: ver si la puede borrar dentro del iterador */
-            ongoingTaskIt = m_ongoingTasks.erase(ongoingTaskIt);  //sino generar lista de tasks a borrar
+            ongoingTaskIt = m_ongoingTasks.erase(ongoingTaskIt);
 
             delete(task);
         }

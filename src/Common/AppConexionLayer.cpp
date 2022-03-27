@@ -40,6 +40,7 @@ AppConexionLayer::~AppConexionLayer()
 void AppConexionLayer::sendTask(Task* task)
 {
     DEBUG_MSG(">>sendTask(" << task->getId() << ")" << std::endl);
+
     FrameTask_t frameTask;
     Resources::ResourcesList_t resourcesList = task->getResourcesList();
 
@@ -53,7 +54,6 @@ void AppConexionLayer::sendTask(Task* task)
     frameTask.state = task->getState();
 
     m_frameLayer->sendFrameTask(&frameTask);
-    DEBUG_MSG("<<sendTask()" << std::endl);
 }
 
 bool AppConexionLayer::receiveTask(Task** task)
@@ -61,7 +61,6 @@ bool AppConexionLayer::receiveTask(Task** task)
     bool ret = false;
     FrameTask_t frameTask = {0};
 
-    DEBUG_MSG(">>receiveTask()" << std::endl);
     ret = m_frameLayer->receiveFrameTask(&frameTask);
     if (ret)
     {
@@ -80,14 +79,12 @@ bool AppConexionLayer::receiveTask(Task** task)
         Task::State_t state = frameTask.state;
 
         (*task) = new Task(id, name, resourcesList, payoff, state);
-        DEBUG_MSG("new Task(" << (*task)->getId() << ") = " << (*task) << std::endl);
+
+        DEBUG_MSG("receiveTask(" << (*task)->getId() << ")" << std::endl);
     }
-    DEBUG_MSG("<<receiveTask()" << std::endl);
 
     return ret;  
 }
-
-
 
 void AppConexionLayer::runnerTask(void)
 {

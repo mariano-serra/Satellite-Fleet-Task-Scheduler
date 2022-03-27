@@ -50,7 +50,12 @@ private:
     Resources *m_hardwareResources; // Bakup
     Resources *m_availableResources;
 
-    typedef std::map<Task*, TaskTime_t> TaskMap_t;
+    typedef struct TaskData
+    {
+        Task* task;
+        TaskTime_t time;
+    }TaskData_t;
+    typedef std::map<Task::TaskId_t, TaskData_t> TaskMap_t;
     TaskMap_t m_ongoingTasks;
 
     AppConexionLayer* m_appConexionLayer;
