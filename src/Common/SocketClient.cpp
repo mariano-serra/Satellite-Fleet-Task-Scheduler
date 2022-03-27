@@ -30,7 +30,11 @@
 
 SocketClient::SocketClient(UniqueDeviceId_t serverId)
 {
-    /* Defino nombre de Server */
+    /*
+     * Defino nombre de Server, en base al identificador.
+     * FIXME: esto es una simplificacion, el socket no deberia saber o tener referencia de
+     * a lo que se quiere comunicar es un 'satelite'.
+     */
     char sat1ServerName[] = "SAT1_SERVER";
     char sat2ServerName[] = "SAT2_SERVER";
     char* serverName;
@@ -54,6 +58,7 @@ SocketClient::SocketClient(UniqueDeviceId_t serverId)
     strcpy( m_remote.sun_path, serverName );
     m_data_len = strlen(m_remote.sun_path) + sizeof(m_remote.sun_family);
 
+    /* Espera a conexion. Esta funcion es bloqueante!!! */
     DEBUG_MSG("Client: Trying to connect..." << std::endl);
     if (connect(m_socketClient, (struct sockaddr*)&m_remote, m_data_len) == -1)
     {
@@ -61,13 +66,13 @@ SocketClient::SocketClient(UniqueDeviceId_t serverId)
         return;
     }
 
-    /* Set Timeout */
+    /* Configuro Timeout */
     struct timeval tv;
     tv.tv_sec = SOCKET_TIMEOUT_S;
     tv.tv_usec = SOCKET_TIMEOUT_uS;
     setsockopt(m_socketClient, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
 
-    /* socket base */
+    /* Socket base */
     m_socket = m_socketClient;
 
     DEBUG_MSG("Client: Connected" << std::endl);

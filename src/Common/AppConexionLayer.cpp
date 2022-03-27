@@ -29,6 +29,10 @@
 
 AppConexionLayer::AppConexionLayer(Socket::SocketType sockeType, UniqueDeviceId_t serverId)
 {
+    /* Construyo el FrameLayer.
+     * TODO: Refactorizar, para implementar mediante: "Decorator Pattern", en donde cada capa (layer) es una abstracion y contiene 
+     * un puntero a otra capa de abstraccion. 
+     */
     m_frameLayer = new FrameLayer(sockeType, serverId);
 }
 
@@ -44,6 +48,7 @@ void AppConexionLayer::sendTask(Task* task)
     FrameTask_t frameTask;
     Resources::ResourcesList_t resourcesList = task->getResourcesList();
 
+    /* Construyo FrameTask en base a la tarea a transmitir */
     frameTask.taskId = task->getId();
 
     frameTask.payoff = task->getPayoff();
@@ -53,6 +58,7 @@ void AppConexionLayer::sendTask(Task* task)
 
     frameTask.state = task->getState();
 
+    /* Envio paquete al FrameLayer */
     m_frameLayer->sendFrameTask(&frameTask);
 }
 
@@ -65,6 +71,8 @@ bool AppConexionLayer::receiveTask(Task** task)
     if (ret)
     {
         Task::TaskId_t id = frameTask.taskId;
+
+        /* Contruyo Tarea en base al FrameTask recibido */
         std::string name = "X";  // No me importa, no lo recibo ni lo transmito
 
         Task::Payoff_t payoff = frameTask.payoff;
@@ -74,20 +82,22 @@ bool AppConexionLayer::receiveTask(Task** task)
         for (int i = 0; i < resourcesAmount; ++i)
         {
             resourcesList.push_back(frameTask.resourcesList[i]);
-        }        
+        }
 
         Task::State_t state = frameTask.state;
 
+        /* Crea (aloco) tarea recibida desde el FrameLayer, y se la paso al dispositivo */
         (*task) = new Task(id, name, resourcesList, payoff, state);
 
         DEBUG_MSG("receiveTask(" << (*task)->getId() << ")" << std::endl);
     }
 
-    return ret;  
+    return ret;
 }
 
 void AppConexionLayer::runnerTask(void)
 {
+    /* Llamo al runner del FrameLayer */
     m_frameLayer->runnerTask();
 }
 

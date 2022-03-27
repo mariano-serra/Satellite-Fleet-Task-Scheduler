@@ -31,23 +31,37 @@
 class Utilities
 {
 public:
+    /**
+     * @brief Calculo de potencia entera (base^(exp))
+     * @details
+     * 
+     * @param base Base
+     * @param exp Exponente
+     * 
+     * @return Resultado de base^(exp).
+     */
     static int ipow(int base, int exp);
 };
 
+/** Solamente si DEBUG esta definido. */
 #ifdef DEBUG
 
-// Extiendo la libreria ostream para para poder imprimir vectores
-template <typename T>
-std::ostream& operator<<(std::ostream& output, std::vector<T> const& values)
-{
-    output << "{";
-    for (auto const& value : values)
+    /**
+     *  Extiendo el operador '<<' para poder imprimir por el std::cout el contenido de un vector
+     *  de un tipo <T> determinado.
+     *  
+     */
+    template <typename T>
+    std::ostream& operator<<(std::ostream& output, std::vector<T> const& values)
     {
-        output << value << ",";
+        output << "{";
+        for (auto const& value : values)
+        {
+            output << value << ",";
+        }
+        output << "}";
+        return output;
     }
-    output << "}";
-    return output;
-}
 
 #endif
 

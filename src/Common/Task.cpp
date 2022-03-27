@@ -33,11 +33,6 @@ Task::Task(Task::TaskId_t taskId, std::string name, Resources::ResourcesList_t r
     m_state = state;
 }
 
-Task::~Task()
-{
-    
-}
-
 Task::Task(std::string name, Resources::ResourcesList_t resourcesList, Payoff_t payoff)
 {
     m_name = name;
@@ -47,8 +42,14 @@ Task::Task(std::string name, Resources::ResourcesList_t resourcesList, Payoff_t 
     m_state = WAITING_TO_BE_EXECUTED;
 }
 
+Task::~Task()
+{
+
+}
+
 Task::TaskId_t Task::getNewId(void)
 {
+    /** Incrementa en uno el Id uniqo de tarea por cada vez que se llama al constructor de tarea */
     return ++idCount;
 }
 

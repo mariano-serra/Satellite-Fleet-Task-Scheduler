@@ -21,6 +21,7 @@
 /* ---------------------------------------------------------------------------*/
 /* Variables externas y privadas                                              */
 /* ---------------------------------------------------------------------------*/
+/* ?¿ */
 static const uint32_t nIncomingConnections = 5;
 
 /* ---------------------------------------------------------------------------*/
@@ -30,7 +31,11 @@ static const uint32_t nIncomingConnections = 5;
 
 SocketServer::SocketServer(UniqueDeviceId_t serverId)
 {
-    /* Defino nombre de Server */
+    /*
+     * Defino nombre de Server, en base al identificador.
+     * FIXME: esto es una simplificacion, el socket no deberia saber o tener referencia de
+     * a lo que se quiere comunicar es un 'satelite'.
+     */
     char sat1ServerName[] = "SAT1_SERVER";
     char sat2ServerName[] = "SAT2_SERVER";
     char* serverName;
@@ -66,6 +71,7 @@ SocketServer::SocketServer(UniqueDeviceId_t serverId)
         DEBUG_MSG("Error on listen call" << std::endl);
     }
 
+    /* Espera a conexion. Esta funcion es bloqueante!!! */
     DEBUG_MSG("Waiting for connection...." << std::endl);
     m_sock_len = 0;
     m_socket = accept(m_socketServer, (struct sockaddr*)&m_remote, &m_sock_len);
@@ -75,7 +81,7 @@ SocketServer::SocketServer(UniqueDeviceId_t serverId)
         return;
     }
 
-    /* Set Timeout client */
+    /* Configuro Timeout client */
     struct timeval tv;
     tv.tv_sec = SOCKET_TIMEOUT_S;
     tv.tv_usec = SOCKET_TIMEOUT_uS;

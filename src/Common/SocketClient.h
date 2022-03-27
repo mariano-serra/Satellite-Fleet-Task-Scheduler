@@ -9,12 +9,12 @@
 #define SOCKET_CLIENT_H
 
 /* ---------------------------------------------------------------------------*/
-/* Includes 																  */
+/* Includes                                                                   */
 /* ---------------------------------------------------------------------------*/
 #include "Socket.h"
 
 /* ---------------------------------------------------------------------------*/
-/* Defines, Estructuras y Typedef Compartidos 								  */
+/* Defines, Estructuras y Typedef Compartidos                                 */
 /* ---------------------------------------------------------------------------*/
 
 /*----------------------------------------------------------------------------*/
@@ -22,23 +22,40 @@
 /*----------------------------------------------------------------------------*/
 
 /*----------------------------------------------------------------------------*/
-/* Clases y Prototipos de funciones Compartidas 				              */
+/* Clases y Prototipos de funciones Compartidas                               */
 /*----------------------------------------------------------------------------*/
+
+/**
+ * @brief Abstraccion para la contruccion de cliente
+ * @details
+ *
+ */
 class SocketClient : public Socket
 {
 public:
+    /**
+     * @brief Constructor
+     * @details [long description]
+     *
+     * @param serverId Identificador unico para la conexion con servidor
+     */
     SocketClient(UniqueDeviceId_t serverId);
+
+    /**
+     * @brief Destructor
+     * @details
+     */
     ~SocketClient();
 
 private:
-    /* Socket Data */
+    /* Socket Vars */
     int m_socketClient = 0;
     int m_data_len = 0;
     struct sockaddr_un m_remote;
 };
 
 /*----------------------------------------------------------------------------*/
-/* Fin 																		  */
+/* Fin                                                                        */
 /*----------------------------------------------------------------------------*/
 
 #endif // SOCKET_CLIENT_H

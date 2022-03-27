@@ -45,12 +45,12 @@ public:
     virtual void SetUp()
     {
         std::string task1Name = "task1";
-        Resources::ResourcesList_t task1ResourcesList = {3,4,5};
+        Resources::ResourcesList_t task1ResourcesList = {3, 4, 5};
         Task::Payoff_t task1Payoff = 1.0f;
         m_task1 = new Task(task1Name, task1ResourcesList, task1Payoff);
 
         std::string task2Name = "task2";
-        Resources::ResourcesList_t task2ResourcesList = {1,5,5,7};
+        Resources::ResourcesList_t task2ResourcesList = {1, 5, 5, 7};
         float task2Payoff = 3.33f;
         m_task2 = new Task(task2Name, task2ResourcesList, task2Payoff);
     }

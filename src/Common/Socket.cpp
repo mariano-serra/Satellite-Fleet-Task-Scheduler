@@ -28,9 +28,7 @@
 
 void Socket::sendData(BufferData_t* bufferData, size_t bufferSize)
 {
-    // DEBUG_MSG(">>sendData()" << std::endl);
-    send(m_socket, bufferData, bufferSize*sizeof(BufferData_t), 0);
-    // DEBUG_MSG("<<sendData()" << std::endl);
+    send(m_socket, bufferData, bufferSize * sizeof(BufferData_t), 0);
 }
 
 bool Socket::receiveData(BufferData_t* bufferData, size_t bufferSize)
@@ -38,15 +36,13 @@ bool Socket::receiveData(BufferData_t* bufferData, size_t bufferSize)
     bool ret = true;
     size_t dataRecvSize;
 
-    // DEBUG_MSG(">>receiveData()" << std::endl);
     dataRecvSize = recv(m_socket, bufferData, bufferSize, 0);
     if (dataRecvSize != bufferSize)
     {
         ret = false;
     }
 
-    // DEBUG_MSG("<<receiveData()" << std::endl);
-    return ret;     
+    return ret;
 }
 
 /*----------------------------------------------------------------------------*/

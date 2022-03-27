@@ -11,12 +11,14 @@
 /* ---------------------------------------------------------------------------*/
 /* Includes 																  */
 /* ---------------------------------------------------------------------------*/
-#include <stdbool.h>
-#include <stdint.h>
-#include <float.h>
-#include <limits.h>
+
+#include <stdbool.h>    /** bool */
+#include <stdint.h>     /** uint8_t, int8_t, uint16_t .... etc. */
+#include <float.h>      /** float, double, etc */
+#include <limits.h>     /** max, min */
 #include <stddef.h>
-// Para que todos lo conozcan
+
+/** Para que todos lo conozcan  */
 #include "Debug.h"
 
 /* ---------------------------------------------------------------------------*/

@@ -13,7 +13,14 @@
 /* ---------------------------------------------------------------------------*/
 /* Defines, Estructuras y Typedef                                             */
 /* ---------------------------------------------------------------------------*/
-static const FrameId_t UnitqueTaskFrameId = 0x14F6FE0C; /* Hash */
+
+/*
+ * Por simplificacion ("time constrain"), el protocolo esta pensado para soportar
+ * un unico comando (enviar/recibir tarea).
+ * TODO: Modoficar el frameBuilde / frameParser, para que soporte multiples comandos y
+ * estructuras de datos a transmitir.
+ */
+static const FrameId_t UniqueTaskFrameId = 0x14F6FE0C; /* Hash */
 
 /* ---------------------------------------------------------------------------*/
 /* Declaracion de funciones                                                   */
@@ -29,6 +36,7 @@ static const FrameId_t UnitqueTaskFrameId = 0x14F6FE0C; /* Hash */
 
 FrameLayer::FrameLayer(Socket::SocketType sockeType, UniqueDeviceId_t serverId)
 {
+    /* Contruyo capa layer inferior (Socket) */
     m_sockeType = sockeType;
 
     if (m_sockeType == Socket::SERVER)
@@ -48,11 +56,12 @@ FrameLayer::~FrameLayer()
 
 void FrameLayer::sendFrameTask(FrameTask_t* taskFrame)
 {
-    // DEBUG_MSG(">>sendFrameTask()" << std::endl);
-    taskFrame->frameId = UnitqueTaskFrameId;
+    taskFrame->frameId = UniqueTaskFrameId;
 
+    /* Reinterpreto estrutura de tarea como buffer para transmitir mediante socket */
     BufferData_t* bufferData = reinterpret_cast<BufferData_t*>(taskFrame);
 
+    /* Envio buffer a socket, Server o Cliente, de acuerdo a lo que corresponda */
     if (m_sockeType == Socket::SERVER)
     {
         m_socketServer->sendData(bufferData, sizeof(FrameTask_t));
@@ -61,14 +70,19 @@ void FrameLayer::sendFrameTask(FrameTask_t* taskFrame)
     {
         m_socketClient->sendData(bufferData, sizeof(FrameTask_t));
     }
-    // DEBUG_MSG("<<sendFrameTask()" << std::endl);
 }
 
 bool FrameLayer::receiveFrameTask(FrameTask_t* taskFrame)
 {
     bool ret;
-    // DEBUG_MSG(">>receiveFrameTask()" << std::endl);
+
+    /* Reintepreto puntero en donde almacenare lo recibido por el socket */
     BufferData_t* bufferData = reinterpret_cast<BufferData_t*>(taskFrame);
+
+    /*
+     * Leo del socket un buffer de datos de tamaño determinado sizeof(FrameTask_t).
+     * Esto solamente es valido por que el protocolo, ahora, solamente soporta un unico comando.
+     */
 
     if (m_sockeType == Socket::SERVER)
     {
@@ -80,12 +94,10 @@ bool FrameLayer::receiveFrameTask(FrameTask_t* taskFrame)
     }
 
     if (ret)
-    {   
+    {
         FrameId_t frameId = taskFrame->frameId;
-        ret = (frameId == UnitqueTaskFrameId);
+        ret = (frameId == UniqueTaskFrameId);
     }
-
-    // DEBUG_MSG("<<receiveFrameTask()" << std::endl);
     return ret;
 }
 
