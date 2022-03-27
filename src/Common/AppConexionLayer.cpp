@@ -40,7 +40,6 @@ AppConexionLayer::~AppConexionLayer()
 
 void AppConexionLayer::sendTask(Task& task)
 {
-    DEBUG_MSG("AppConexionLayer::sendTask()" << std::endl);
     FrameTask_t frameTask;
     Resources::ResourcesList_t resourcesList = task.getResourcesList();
 

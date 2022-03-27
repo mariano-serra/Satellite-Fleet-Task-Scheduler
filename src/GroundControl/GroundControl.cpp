@@ -95,7 +95,6 @@ bool GroundControl::addListTaskToDo(PermutationTaskSolver::TaskList_t& taskList)
 
 void GroundControl::sendSatelite1TaskList(PermutationTaskSolver::TaskList_t taskList)
 {
-	DEBUG_MSG("GroundControl::sendSatelite1TaskList()" << std::endl);
 	/* Hacia protocolo */
 	for (PermutationTaskSolver::TaskList_t::iterator taskIt = taskList.begin(); taskIt < taskList.end(); ++taskIt)
 	{
@@ -104,7 +103,6 @@ void GroundControl::sendSatelite1TaskList(PermutationTaskSolver::TaskList_t task
 		/* Asigno la tarea al satelite mediante el protocolo */
 		if (m_satelite1AppConexionLayer)
 		{
-			DEBUG_MSG("m_satelite1AppConexionLayer->sendTask()" << std::endl);
 			m_satelite1AppConexionLayer->sendTask((*task));
 		}
 
@@ -115,7 +113,6 @@ void GroundControl::sendSatelite1TaskList(PermutationTaskSolver::TaskList_t task
 
 void GroundControl::sendSatelite2TaskList(PermutationTaskSolver::TaskList_t taskList)
 {
-	DEBUG_MSG("GroundControl::sendSatelite2TaskList()" << std::endl);
 	/* Hacia protocolo */
 	for (PermutationTaskSolver::TaskList_t::iterator taskIt = taskList.begin(); taskIt < taskList.end(); ++taskIt)
 	{
@@ -124,7 +121,6 @@ void GroundControl::sendSatelite2TaskList(PermutationTaskSolver::TaskList_t task
 		/* Asigno la tarea al satelite mediante el protocolo */
 		if (m_satelite2AppConexionLayer)
 		{
-			DEBUG_MSG("m_satelite2AppConexionLayer->sendTask()" << std::endl);
 			m_satelite2AppConexionLayer->sendTask((*task));
 		}
 
@@ -184,7 +180,6 @@ void GroundControl::processTaskListToDo(void)
 	PermutationTaskSolver::validateTaskPermutatioMatrix(*m_satelite1AvailableResources, *m_satelite2AvailableResources,
 													    m_UnassignedTaskList, m_Satelite1TaskList, m_Satelite2TaskList);
 	
-	DEBUG_MSG("GroundControl::processTaskListToDo()" << std::endl);
 	sendSatelite1TaskList(m_Satelite1TaskList);
 	sendSatelite2TaskList(m_Satelite2TaskList);
 
