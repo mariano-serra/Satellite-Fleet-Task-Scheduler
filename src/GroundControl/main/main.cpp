@@ -57,8 +57,6 @@ int main(int argc, char **argv)
 
         /* Task  Runner */
         groundControl->runnerTask();
-
-        // TODO: Add MessageBroker.runnerTask();
     }
 
     return 0;
