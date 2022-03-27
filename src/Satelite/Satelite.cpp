@@ -85,7 +85,6 @@ void Satelite::getNewTaskToDo(void)
         Task* newTask;
         if (m_appConexionLayer->receiveTask(&newTask))
         {
-            DEBUG_MSG(">> new Task() = " << newTask << std::endl);
             addTaskToDo(newTask);
         }
     }
@@ -93,6 +92,8 @@ void Satelite::getNewTaskToDo(void)
 
 void Satelite::runOngoingTask(void)
 {
+    Task::TaskIdList_t deleteTaskList;
+
     for (TaskMap_t::iterator ongoingTaskIt = m_ongoingTasks.begin(); ongoingTaskIt != m_ongoingTasks.end(); ++ongoingTaskIt)
     {
         Task::TaskId_t taskId = ongoingTaskIt->first;
@@ -120,11 +121,17 @@ void Satelite::runOngoingTask(void)
             /* Libera los recursos */
             m_availableResources->add(task->getResourcesList());
 
-            /* Borra tarea a la lista de pendientes */
-            ongoingTaskIt = m_ongoingTasks.erase(ongoingTaskIt);
+            /* Agrego tarea a borra en el mapa */
+            deleteTaskList.push_back(taskId);
 
             delete(task);
         }
+    }
+
+    for (Task::TaskIdList_t::iterator taskIdIt = deleteTaskList.begin(); taskIdIt < deleteTaskList.end(); ++taskIdIt)
+    {
+        Task::TaskId_t taskId = (*taskIdIt);
+        m_ongoingTasks.erase(taskId);
     }
 }
 

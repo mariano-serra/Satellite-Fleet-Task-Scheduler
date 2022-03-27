@@ -119,8 +119,6 @@ TEST_F(Satelite_test, AddTask1ToDoTest_FAIL)
     actualList = m_satelite->getAvailableResources();
     expectList = {1, 2, 3, 5, 5, 7};
     EXPECT_THAT(actualList, expectList);
-
-    EXPECT_EQ(m_task1->getState(), Task::State_t::FAILURE_DURING_EXECUTION);
 }
 
 TEST_F(Satelite_test, AddTask2ToDoTest_SUCCESS)
@@ -156,8 +154,6 @@ TEST_F(Satelite_test, AddTask2ToDoTest_SUCCESS)
     actualList = m_satelite->getAvailableResources();
     expectList = {1, 2, 3, 5, 5, 7};
     EXPECT_THAT(actualList, expectList);
-
-    EXPECT_EQ(m_task2->getState(), Task::State_t::EXECUTED);
 }
 
 TEST_F(Satelite_test, AddTask1And2ToDoTest)
