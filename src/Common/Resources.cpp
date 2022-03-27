@@ -62,11 +62,15 @@ bool Resources::contains(ResourcesList_t resourcesList)
 
         if (auxResourcesMap.find(resourceElement) != auxResourcesMap.end())
         {
-            auxResourcesMap[resourceElement]--;
-            if (auxResourcesMap[resourceElement] < 0)
+            if (auxResourcesMap[resourceElement] == 0)
             {
+                auxResourcesMap.erase(resourceElement);
                 ret = false;       
-            }   
+            }
+            else
+            {
+                auxResourcesMap[resourceElement]--;
+            }
         }
         else
         {
