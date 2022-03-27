@@ -33,7 +33,7 @@ public:
     ~AppConexionLayer();
     
     void sendTask(Task* task);
-    bool receiveTask(Task* task);
+    bool receiveTask(Task** task);
 
     void runnerTask(void);
     

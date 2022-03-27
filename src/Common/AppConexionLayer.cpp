@@ -54,25 +54,30 @@ void AppConexionLayer::sendTask(Task* task)
     m_frameLayer->sendFrameTask(&frameTask);
 }
 
-bool AppConexionLayer::receiveTask(Task* task)
+bool AppConexionLayer::receiveTask(Task** task)
 {
     bool ret = false;
     FrameTask_t frameTask;
 
     ret = m_frameLayer->receiveFrameTask(&frameTask);
-
     if (ret)
     {
         Task::TaskId_t id = frameTask.taskId;
-        std::string name = "task";  // No me importa, no lo recibo ni lo transmito
+        std::string name = "X";  // No me importa, no lo recibo ni lo transmito
+
+        Task::Payoff_t payoff = frameTask.payoff;
 
         Resources::ResourceAmount_t resourcesAmount = frameTask.resourcesAmount;
         Resources::ResourcesList_t resourcesList;
-        std::copy(frameTask.resourcesList, frameTask.resourcesList + resourcesAmount, resourcesList.begin());
-        
-        Task::Payoff_t payoff = frameTask.payoff;
+        for (int i = 0; i < resourcesAmount; ++i)
+        {
+            resourcesList.push_back(frameTask.resourcesList[i]);
+        }        
 
-        task = new Task(id, name, resourcesList, payoff);
+        Task::State_t state = frameTask.state;
+
+        DEBUG_MSG("new Task()");
+        (*task) = new Task(id, name, resourcesList, payoff, state);
     }
 
     return ret;  

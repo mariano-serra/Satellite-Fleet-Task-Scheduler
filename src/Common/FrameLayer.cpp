@@ -50,7 +50,7 @@ void FrameLayer::sendFrameTask(FrameTask_t* taskFrame)
 {
     taskFrame->frameId = UnitqueTaskFrameId;
 
-    BufferData_t* bufferData = reinterpret_cast<BufferData_t*>(&taskFrame);
+    BufferData_t* bufferData = reinterpret_cast<BufferData_t*>(taskFrame);
 
     if (m_sockeType == Socket::SERVER)
     {
@@ -66,7 +66,7 @@ bool FrameLayer::receiveFrameTask(FrameTask_t* taskFrame)
 {
     bool ret;
 
-    BufferData_t* bufferData = reinterpret_cast<BufferData_t*>(&taskFrame);
+    BufferData_t* bufferData = reinterpret_cast<BufferData_t*>(taskFrame);
 
     if (m_sockeType == Socket::SERVER)
     {
@@ -79,7 +79,8 @@ bool FrameLayer::receiveFrameTask(FrameTask_t* taskFrame)
 
     if (ret)
     {   
-        ret = (taskFrame->frameId == UnitqueTaskFrameId);
+        FrameId_t frameId = taskFrame->frameId;
+        ret = (frameId == UnitqueTaskFrameId);
     }
 
     return ret;
