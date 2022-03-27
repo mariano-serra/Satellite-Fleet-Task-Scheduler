@@ -24,13 +24,13 @@ Task::TaskId_t Task::idCount = 0;
 /* Implementacion de clases y funciones                                       */
 /* ---------------------------------------------------------------------------*/
 
-Task::Task(Task::TaskId_t taskId, std::string name, Resources::ResourcesList_t resourcesList, Payoff_t payoff)
+Task::Task(Task::TaskId_t taskId, std::string name, Resources::ResourcesList_t resourcesList, Payoff_t payoff, State_t state)
 {
     m_id = taskId;
     m_name = name;
     m_resourcesList = resourcesList;
     m_payoff = payoff;
-    m_state = WAITING_TO_BE_EXECUTED;
+    m_state = state;
 }
 
 Task::~Task()

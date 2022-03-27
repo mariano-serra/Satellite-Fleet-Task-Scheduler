@@ -43,7 +43,7 @@ public:
 		FAILURE_DURING_EXECUTION,    	
     }State_t;
 
-    Task(Task::TaskId_t taskId, std::string name, Resources::ResourcesList_t resourcesList, Payoff_t payoff);
+    Task(Task::TaskId_t taskId, std::string name, Resources::ResourcesList_t resourcesList, Payoff_t payoff, State_t state);
 	Task(std::string name, Resources::ResourcesList_t resourcesList, Payoff_t payoff);
 	~Task();
 
