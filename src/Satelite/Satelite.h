@@ -40,6 +40,9 @@ public:
     Resources::ResourcesList_t getAvailableResources(void);
     bool addTaskToDo(Task* task);
 
+    void getNewTaskToDo(void);
+    void runOngoingTask(void);
+
     void runnerTask(void);
     
     virtual bool FakeTaskSuccess(void);

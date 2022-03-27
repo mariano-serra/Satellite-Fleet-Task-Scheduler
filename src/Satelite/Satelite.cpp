@@ -77,8 +77,8 @@ bool Satelite::addTaskToDo(Task* task)
     return ret;
 }
 
-void Satelite::runnerTask(void)
-{ 
+void Satelite::getNewTaskToDo(void)
+{
     /* Get new Task ToDo */
     if (m_appConexionLayer)
     {
@@ -89,8 +89,10 @@ void Satelite::runnerTask(void)
             addTaskToDo(newTask);
         }
     }
+}
 
-    /* Run Satelite Task List */
+void Satelite::runOngoingTask(void)
+{
     for (TaskMap_t::iterator ongoingTaskIt = m_ongoingTasks.begin(); ongoingTaskIt != m_ongoingTasks.end(); ++ongoingTaskIt)
     {
         Task::TaskId_t taskId = ongoingTaskIt->first;
@@ -124,6 +126,15 @@ void Satelite::runnerTask(void)
             delete(task);
         }
     }
+}
+
+void Satelite::runnerTask(void)
+{ 
+    /* Get new Task ToDo */
+    getNewTaskToDo();
+
+    /* Run Satelite Task List */
+    runOngoingTask();
 }
 
 bool Satelite::FakeTaskSuccess(void)
