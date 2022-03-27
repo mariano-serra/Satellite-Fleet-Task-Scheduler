@@ -36,3 +36,7 @@ README
 * UnitTest (Gtest / GMock):
 	> chmod +x ./unitTest.sh
 	> ./unitTest.sh
+
+* Run (GrounControl / Satelite1 / Satelite 2):
+	> chmod +x ./main.sh
+	> ./main.sh

@@ -129,9 +129,56 @@ void GroundControl::sendSatelite2TaskList(Task::TaskList_t taskList)
 	}
 }
 
+void GroundControl::updateSatelite1TaskState(Task* task)
+{
+	/* Borro tarea del mapa */
+	m_taskMap.erase(task->getId());
+
+	/* Reasigno nuevamente los recursos de ese satelite que la tarea libero */
+	m_satelite1AvailableResources->add(task->getResourcesList());
+
+	/* Borro tarea */
+	delete(task);
+}
+
+void GroundControl::updateSatelite2TaskState(Task* task)
+{
+	/* Borro tarea del mapa */
+	m_taskMap.erase(task->getId());
+
+	/* Reasigno nuevamente los recursos de ese satelite que la tarea libero */
+	m_satelite2AvailableResources->add(task->getResourcesList());
+
+	/* Borro tarea */
+	delete(task);
+}
+
+void GroundControl::updateTaskState(void)
+{
+    /* Get new Task ToDo */
+    if (m_satelite1AppConexionLayer)
+    {
+        Task* newTask;
+        if (m_satelite1AppConexionLayer->receiveTask(&newTask))
+        {
+            updateSatelite1TaskState(newTask);
+        }
+    }
+
+    /* Get new Task ToDo */
+    if (m_satelite2AppConexionLayer)
+    {
+        Task* newTask;
+        if (m_satelite2AppConexionLayer->receiveTask(&newTask))
+        {
+            updateSatelite2TaskState(newTask);
+        }
+    }
+}
+
 void GroundControl::runnerTask(void)
 {
-	
+    updateTaskState();
 }
 
 bool GroundControl::validateTaskOverHardwareResources(Task& task)

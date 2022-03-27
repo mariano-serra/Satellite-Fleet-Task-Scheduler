@@ -36,10 +36,15 @@ public:
 
     bool addListTaskToDo(Task::TaskList_t& taskList);
 
-    void runnerTask(void);
-
     virtual void sendSatelite1TaskList(Task::TaskList_t taskList);
     virtual void sendSatelite2TaskList(Task::TaskList_t taskList);
+
+    void updateSatelite1TaskState(Task* task);
+    void updateSatelite2TaskState(Task* task);
+    void updateTaskState(void);
+
+    void runnerTask(void);
+
 
 private:
     
