@@ -61,7 +61,7 @@ GroundControl::~GroundControl()
 bool GroundControl::addListTaskToDo(PermutationTaskSolver::TaskList_t& taskList)
 {
 
-	// DEBUG_MSG("TaskList:\t" << taskList << std::endl);
+	DEBUG_MSG("TaskList:\t" << taskList << std::endl);
 
 	for (PermutationTaskSolver::TaskList_t::iterator taskIt = taskList.begin(); taskIt < taskList.end(); ++taskIt)
 	{
@@ -76,16 +76,16 @@ bool GroundControl::addListTaskToDo(PermutationTaskSolver::TaskList_t& taskList)
 		}
 	}
 
-	// DEBUG_MSG("TodoTaskList:\t" << m_TodoTaskList << std::endl);
+	DEBUG_MSG("TodoTaskList:\t" << m_TodoTaskList << std::endl);
 
 	/* Process Task List */
 	sortTodoTaskListByPayoff();
 
-	// DEBUG_MSG("Sorted TodoTaskList:\t" << m_TodoTaskList << std::endl);
+	DEBUG_MSG("Sorted TodoTaskList:\t" << m_TodoTaskList << std::endl);
 	
 	calcBestTodoTaskList();
 
-	// DEBUG_MSG("Trim TodoTaskList:\t" << m_TodoTaskList << std::endl);
+	DEBUG_MSG("Trim TodoTaskList:\t" << m_TodoTaskList << std::endl);
 
 	/* Solver */
 	processTaskListToDo();
