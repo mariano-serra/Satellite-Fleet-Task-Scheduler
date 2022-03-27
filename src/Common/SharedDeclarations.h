@@ -30,7 +30,7 @@ static const Resources::ResourcesList_t SATELITE_1_RES = {1, 2, 3, 4, 5, 6, 7, 8
 static const Resources::ResourcesList_t SATELITE_2_RES = {1, 2, 3, 5, 5, 6, 7, 8, 10};
 
 /* Sockets */
-#define BUFFER_SIZE (200)
+#define BUFFER_SIZE (5000)
 typedef char BufferData_t;
 typedef std::vector<BufferData_t> CommunicationsBuffer_t;
 

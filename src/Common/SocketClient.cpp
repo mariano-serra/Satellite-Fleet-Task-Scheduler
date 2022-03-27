@@ -28,7 +28,7 @@
 /* ---------------------------------------------------------------------------*/
 
 
-SocketClient::SocketClient(UniqueDeviceId_t serverId, ProcessReciveData_t processReciveData)
+SocketClient::SocketClient(UniqueDeviceId_t serverId, ProcessReciveData_t processReciveData) : Socket()
 {
     /* Defino nombre de Server */
     char sat1ServerName[] = "../../Satelite/main/SAT1_SERVER";
@@ -61,6 +61,15 @@ SocketClient::SocketClient(UniqueDeviceId_t serverId, ProcessReciveData_t proces
         return;
     }
 
+    /* Set Timeout */
+    struct timeval tv;
+    tv.tv_sec = 1;
+    tv.tv_usec = 0;
+    setsockopt(m_socketClient, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
+
+    /* socket base */
+    m_socket = m_socketClient;
+
     DEBUG_MSG("Client: Connected" << std::endl);
 
     /* Handler de recepcion */
@@ -74,6 +83,7 @@ SocketClient::~SocketClient()
 
 void SocketClient::runnerTask(void)
 {
+    DEBUG_MSG("SocketClient::runnerTask" << std::endl);
     bufferDataProcces();
 }
 

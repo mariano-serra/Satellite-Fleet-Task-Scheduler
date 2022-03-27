@@ -37,6 +37,8 @@ public:
         CLIENT,
     }SocketType_t;
 
+    Socket();
+
     /* Socket Data */
     int m_socket = 0;
 
@@ -45,7 +47,7 @@ public:
     void sendData(CommunicationsBuffer_t& bufferData);
 
     /* Buffer de recepcion */
-    BufferData_t m_recv_buf[BUFFER_SIZE];
+    BufferData_t m_recv_buf[2*BUFFER_SIZE];
     /* Buffers de transimision */
     BufferData_t m_send_buf[BUFFER_SIZE];
     CommunicationsBuffer_t m_DataToSend;

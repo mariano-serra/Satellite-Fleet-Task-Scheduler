@@ -28,7 +28,7 @@ static const uint32_t nIncomingConnections = 5;
 /* ---------------------------------------------------------------------------*/
 
 
-SocketServer::SocketServer(UniqueDeviceId_t serverId, ProcessReciveData_t processReciveData)
+SocketServer::SocketServer(UniqueDeviceId_t serverId, ProcessReciveData_t processReciveData) : Socket()
 {
     /* Defino nombre de Server */
     char sat1ServerName[] = "SAT1_SERVER";
@@ -81,6 +81,7 @@ SocketServer::~SocketServer()
 
 void SocketServer::runnerTask(void)
 {
+    DEBUG_MSG("SocketServer::runnerTask" << std::endl);
     switch (m_state)
     {
     case CONNECTED:
@@ -99,6 +100,12 @@ void SocketServer::runnerTask(void)
             DEBUG_MSG("Error on accept() call" << std::endl);
             return;
         }
+
+        /* Set Timeout */
+        struct timeval tv;
+        tv.tv_sec = 1;
+        tv.tv_usec = 0;
+        setsockopt(m_socketServer, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
 
         DEBUG_MSG("Server connected" << std::endl);
         m_state = CONNECTED;
