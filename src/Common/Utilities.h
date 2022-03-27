@@ -31,9 +31,6 @@
 class Utilities
 {
 public:
-    static std::vector<int> string2vector(std::string str);
-    static std::string vector2string(std::vector<int> vec);
-
     static int ipow(int base, int exp);
 };
 

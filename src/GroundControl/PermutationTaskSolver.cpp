@@ -56,7 +56,7 @@ void PermutationTaskSolver::incrementDeviceVector(DeviceVector_t& vec, uint32_t 
     }
 }
 
-void PermutationTaskSolver::makeTaskPermutatioMatrix(TaskList_t& taskList)
+void PermutationTaskSolver::makeTaskPermutatioMatrix(Task::TaskList_t& taskList)
 {
     /* Orden de Solucion de permutacion */
     uint32_t taskNumber = taskList.size();                                  /* order        */
@@ -65,7 +65,7 @@ void PermutationTaskSolver::makeTaskPermutatioMatrix(TaskList_t& taskList)
 
     /* Max Payoff Calc */
     Task::Payoff_t maxPayoff = 0;
-    for (TaskList_t::iterator taskListIt = taskList.begin(); taskListIt < taskList.end(); ++taskListIt)
+    for (Task::TaskList_t::iterator taskListIt = taskList.begin(); taskListIt < taskList.end(); ++taskListIt)
     {
         Task* task = (*taskListIt);
         maxPayoff += task->getPayoff(); 
@@ -103,10 +103,10 @@ void PermutationTaskSolver::makeTaskPermutatioMatrix(TaskList_t& taskList)
          *  Se utiliza el GROUND_CONTROL_ID, como indice de las tareas que no pueden ser asignadas a los satelites,
          *  por falta de recursos. */
         DEBUG_MSG("\t- Non Assigned TaskIdList:\t" << taskIdListVector[GROUND_CONTROL_ID]);
-        TaskList_t unassignedTaskList = taskListVector[GROUND_CONTROL_ID];
+        Task::TaskList_t unassignedTaskList = taskListVector[GROUND_CONTROL_ID];
         Task::Payoff_t unassignedTaskPayoff = 0;
 
-        for (TaskList_t::iterator taskListIt = unassignedTaskList.begin(); taskListIt < unassignedTaskList.end(); ++taskListIt)
+        for (Task::TaskList_t::iterator taskListIt = unassignedTaskList.begin(); taskListIt < unassignedTaskList.end(); ++taskListIt)
         {
             Task* task = (*taskListIt);
             unassignedTaskPayoff += task->getPayoff();
@@ -133,7 +133,7 @@ void PermutationTaskSolver::sortTaskPermutatioMatrixByPayoff(void)
 }
 
 bool PermutationTaskSolver::validateTaskPermutatioMatrix(Resources& satelite1Resources, Resources& satelite2Resources, 
-                                                         TaskList_t& unassignedTaskList, TaskList_t& satelite1TaskList, TaskList_t& satelite2TaskList)
+                                                         Task::TaskList_t& unassignedTaskList, Task::TaskList_t& satelite1TaskList, Task::TaskList_t& satelite2TaskList)
 {
     bool ret = false;
     uint32_t permutation = 0;
@@ -155,11 +155,11 @@ bool PermutationTaskSolver::validateTaskPermutatioMatrix(Resources& satelite1Res
 
         for (TaskListVector_t::iterator taskListIt = taskListVector.begin(); taskListIt < taskListVector.end(); ++taskListIt)
         {
-            TaskList_t taskList = (*taskListIt);
+            Task::TaskList_t taskList = (*taskListIt);
             DEBUG_MSG("\tDeviceId\t" << deviceIndex << "\t- TaskList:\t" << taskList);
 
             Resources::ResourcesList_t resourcesList;
-            for (TaskList_t::iterator taskIt = taskList.begin(); taskIt < taskList.end(); ++taskIt)
+            for (Task::TaskList_t::iterator taskIt = taskList.begin(); taskIt < taskList.end(); ++taskIt)
             {
                 Task* task = (*taskIt);
                 Resources::ResourcesList_t resourcesListTask = task->getResourcesList();

@@ -58,12 +58,12 @@ GroundControl::~GroundControl()
 	delete(m_satelite2AvailableResources);
 }
 
-bool GroundControl::addListTaskToDo(PermutationTaskSolver::TaskList_t& taskList)
+bool GroundControl::addListTaskToDo(Task::TaskList_t& taskList)
 {
 
 	DEBUG_MSG("TaskList:\t" << taskList << std::endl);
 
-	for (PermutationTaskSolver::TaskList_t::iterator taskIt = taskList.begin(); taskIt < taskList.end(); ++taskIt)
+	for (Task::TaskList_t::iterator taskIt = taskList.begin(); taskIt < taskList.end(); ++taskIt)
 	{
 		Task* task = (*taskIt);
 
@@ -93,10 +93,10 @@ bool GroundControl::addListTaskToDo(PermutationTaskSolver::TaskList_t& taskList)
 	return true;
 }
 
-void GroundControl::sendSatelite1TaskList(PermutationTaskSolver::TaskList_t taskList)
+void GroundControl::sendSatelite1TaskList(Task::TaskList_t taskList)
 {
 	/* Hacia protocolo */
-	for (PermutationTaskSolver::TaskList_t::iterator taskIt = taskList.begin(); taskIt < taskList.end(); ++taskIt)
+	for (Task::TaskList_t::iterator taskIt = taskList.begin(); taskIt < taskList.end(); ++taskIt)
 	{
 		Task* task = (*taskIt);
 
@@ -111,10 +111,10 @@ void GroundControl::sendSatelite1TaskList(PermutationTaskSolver::TaskList_t task
 	}
 }
 
-void GroundControl::sendSatelite2TaskList(PermutationTaskSolver::TaskList_t taskList)
+void GroundControl::sendSatelite2TaskList(Task::TaskList_t taskList)
 {
 	/* Hacia protocolo */
-	for (PermutationTaskSolver::TaskList_t::iterator taskIt = taskList.begin(); taskIt < taskList.end(); ++taskIt)
+	for (Task::TaskList_t::iterator taskIt = taskList.begin(); taskIt < taskList.end(); ++taskIt)
 	{
 		Task* task = (*taskIt);
 
@@ -155,8 +155,8 @@ void GroundControl::sortTodoTaskListByPayoff(void)
 
 void GroundControl::calcBestTodoTaskList(void)
 {
-	PermutationTaskSolver::TaskList_t::iterator initTaskIt = m_TodoTaskList.begin();
-	PermutationTaskSolver::TaskList_t::iterator endTaskIt = m_TodoTaskList.end();
+	Task::TaskList_t::iterator initTaskIt = m_TodoTaskList.begin();
+	Task::TaskList_t::iterator endTaskIt = m_TodoTaskList.end();
 
 	if (m_TodoTaskList.size() > MAX_TASK_NUMBER_PERMUTATION_SOLVER)
 	{

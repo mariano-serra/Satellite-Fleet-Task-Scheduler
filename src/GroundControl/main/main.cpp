@@ -39,7 +39,7 @@ int main(int argc, char **argv)
 
 
     /* Tareas Harcodeadas */
-    PermutationTaskSolver::TaskList_t taskList;
+    Task::TaskList_t taskList;
     Task task1("task1", {3,4,5}, 1.0f);
     taskList.push_back(&task1);
 

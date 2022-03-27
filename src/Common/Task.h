@@ -35,6 +35,9 @@ public:
 	typedef uint32_t TaskId_t;
 	typedef float Payoff_t;
 
+	typedef std::vector<Task*> TaskList_t;
+    typedef std::vector<Task::TaskId_t> TaskIdList_t;
+
 	typedef enum 
     {
 		WAITING_TO_BE_EXECUTED,

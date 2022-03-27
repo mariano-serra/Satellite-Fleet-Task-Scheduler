@@ -43,7 +43,7 @@ public:
     Task* m_task1;
     Task* m_task2;
 
-    PermutationTaskSolver::TaskList_t m_taskList;
+    Task::TaskList_t m_taskList;
 
 
     /* === TEST SETUP === */
@@ -109,20 +109,20 @@ TEST_F(PermutationTaskSolver_test, SortTaskPermutatioMatrixByPayoffTest)
 
 TEST_F(PermutationTaskSolver_test, ValidateTaskPermutatioMatrixTest)
 {
-    PermutationTaskSolver::TaskList_t unassignedTaskList;
-    PermutationTaskSolver::TaskList_t satelite1TaskList;
-    PermutationTaskSolver::TaskList_t satelite2TaskList;
+    Task::TaskList_t unassignedTaskList;
+    Task::TaskList_t satelite1TaskList;
+    Task::TaskList_t satelite2TaskList;
 
     EXPECT_TRUE(PermutationTaskSolver::validateTaskPermutatioMatrix(*m_satelite1Resources, *m_satelite2Resources,
                                                                     unassignedTaskList, satelite1TaskList, satelite2TaskList));
 
-    PermutationTaskSolver::TaskList_t expectedUnassignedTaskList = {};
+    Task::TaskList_t expectedUnassignedTaskList = {};
     EXPECT_THAT(unassignedTaskList, expectedUnassignedTaskList);
 
-    PermutationTaskSolver::TaskList_t expectedSatelite1TaskList = {m_task1, m_task2};
+    Task::TaskList_t expectedSatelite1TaskList = {m_task1, m_task2};
     EXPECT_THAT(satelite1TaskList, expectedSatelite1TaskList);
 
-    PermutationTaskSolver::TaskList_t expectedSatelite2TaskList = {};
+    Task::TaskList_t expectedSatelite2TaskList = {};
     EXPECT_THAT(satelite2TaskList, expectedSatelite2TaskList);
 }
 

@@ -27,31 +27,6 @@
 /* Implementacion de clases y funciones                                       */
 /* ---------------------------------------------------------------------------*/
 
-// FIXME: No funciona.... lo ideal seria que esto sea un TEMPLATE
-std::vector<int> Utilities::string2vector(std::string str)
-{
-    std::vector<int> vec;
-    std::stringstream ss(str);
-
-    for (int i; ss >> i;)
-    {
-        vec.push_back(i);
-
-        if (ss.peek() == ',')
-        {
-            ss.ignore();
-        }
-    }
-
-    return vec;
-}
-
-std::string Utilities::vector2string(std::vector<int> vec)
-{
-    std::string str;
-    return str;
-}
-
 int Utilities::ipow(int base, int exp)
 {
     int result = 1;

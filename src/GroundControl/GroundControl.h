@@ -34,12 +34,12 @@ public:
     GroundControl(UniqueDeviceId_t id, AppConexionLayer* satelite1AppConexionLayer, AppConexionLayer* satelite2AppConexionLayer);
     ~GroundControl();
 
-    bool addListTaskToDo(PermutationTaskSolver::TaskList_t& taskList);
+    bool addListTaskToDo(Task::TaskList_t& taskList);
 
     void runnerTask(void);
 
-    virtual void sendSatelite1TaskList(PermutationTaskSolver::TaskList_t taskList);
-    virtual void sendSatelite2TaskList(PermutationTaskSolver::TaskList_t taskList);
+    virtual void sendSatelite1TaskList(Task::TaskList_t taskList);
+    virtual void sendSatelite2TaskList(Task::TaskList_t taskList);
 
 private:
     
@@ -56,11 +56,11 @@ private:
     Resources* m_satelite2HardwareResources;
     Resources* m_satelite2AvailableResources;
 
-    PermutationTaskSolver::TaskList_t m_TodoTaskList;
-    PermutationTaskSolver::TaskList_t m_BestTodoTaskList;
-    PermutationTaskSolver::TaskList_t m_UnassignedTaskList;
-    PermutationTaskSolver::TaskList_t m_Satelite1TaskList;
-    PermutationTaskSolver::TaskList_t m_Satelite2TaskList;
+    Task::TaskList_t m_TodoTaskList;
+    Task::TaskList_t m_BestTodoTaskList;
+    Task::TaskList_t m_UnassignedTaskList;
+    Task::TaskList_t m_Satelite1TaskList;
+    Task::TaskList_t m_Satelite2TaskList;
 
     typedef std::map<Task::TaskId_t, Task*> TaskMap_t;
     TaskMap_t m_taskMap;

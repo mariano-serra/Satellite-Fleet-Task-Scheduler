@@ -57,6 +57,8 @@ public:
 
     virtual void TearDown()
     {
+        delete(m_task1);
+        delete(m_task2);
     }
 };
 

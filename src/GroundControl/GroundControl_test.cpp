@@ -39,8 +39,8 @@ class GroundControl_Mock : public GroundControl
 public:
     using GroundControl::GroundControl;
 
-    MOCK_METHOD1(sendSatelite1TaskList, void(PermutationTaskSolver::TaskList_t));
-    MOCK_METHOD1(sendSatelite2TaskList, void(PermutationTaskSolver::TaskList_t));
+    MOCK_METHOD1(sendSatelite1TaskList, void(Task::TaskList_t));
+    MOCK_METHOD1(sendSatelite2TaskList, void(Task::TaskList_t));
 };
 
 class GroundControl_test  : public testing::Test
@@ -53,7 +53,7 @@ public:
     Task* m_task3;
     Task* m_task4;
     
-    PermutationTaskSolver::TaskList_t m_taskList;
+    Task::TaskList_t m_taskList;
 
     /* === TEST SETUP === */
 
@@ -105,8 +105,8 @@ TEST_F(GroundControl_test, AssingSateliteTaskTest)
     // Sorted TodoTaskList:     {0x55c063667bd0,0x55c063667d70,0x55c063667c40,0x55c063667cd0}
     // Trim TodoTaskList:       {0x55c063667cd0}
 
-    PermutationTaskSolver::TaskList_t expectedSatelite1TaskList = {m_task4};
-    PermutationTaskSolver::TaskList_t expectedSatelite2TaskList = {m_task1, m_task2};
+    Task::TaskList_t expectedSatelite1TaskList = {m_task4};
+    Task::TaskList_t expectedSatelite2TaskList = {m_task1, m_task2};
 
     EXPECT_CALL(*m_groundControl, sendSatelite1TaskList(expectedSatelite1TaskList));
     EXPECT_CALL(*m_groundControl, sendSatelite2TaskList(expectedSatelite2TaskList));
