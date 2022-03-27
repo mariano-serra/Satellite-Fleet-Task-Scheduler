@@ -136,7 +136,7 @@ void Satelite::runOngoingTask(void)
 }
 
 void Satelite::runnerTask(void)
-{ 
+{
     /* Get new Task ToDo */
     getNewTaskToDo();
 
