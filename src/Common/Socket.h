@@ -19,7 +19,11 @@
 /* ---------------------------------------------------------------------------*/
 /* Defines, Estructuras y Typedef Compartidos 								  */
 /* ---------------------------------------------------------------------------*/
-typedef void (*ProcessReciveData_t)(BufferData_t data);
+#define BUFFER_SIZE (5000)
+#define SOCKET_TIMEOUT_S (1)
+
+typedef char BufferData_t;
+typedef void (*ProcessReciveData_t)(BufferData_t* bufferData, size_t bufferSize);
 
 /*----------------------------------------------------------------------------*/
 /* Variables Compartidas                                                      */
@@ -44,13 +48,16 @@ public:
 
     /* Metodos de recepcion y */
     ProcessReciveData_t m_processReciveData;
-    void sendData(CommunicationsBuffer_t& bufferData);
+    void sendData(BufferData_t* bufferData, size_t bufferSize);
 
     /* Buffer de recepcion */
-    BufferData_t m_recv_buf[2*BUFFER_SIZE];
+    BufferData_t m_recv_buf[BUFFER_SIZE];
     /* Buffers de transimision */
     BufferData_t m_send_buf[BUFFER_SIZE];
-    CommunicationsBuffer_t m_DataToSend;
+
+    /* Data Receive config*/
+    size_t m_chunkSize;
+    void setChunkDataSize(size_t size);
 
     /* runner */
     void bufferDataProcces(void);

@@ -56,7 +56,7 @@ private:
     Socket::SocketType m_sockeType;
     SocketServer* m_socketServer;
     SocketClient* m_socketClient;
-    static void processReciveData(BufferData_t data);
+    static void processReciveData(BufferData_t* bufferData, size_t bufferSize);
 };
 
 /*----------------------------------------------------------------------------*/

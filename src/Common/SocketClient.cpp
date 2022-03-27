@@ -63,7 +63,7 @@ SocketClient::SocketClient(UniqueDeviceId_t serverId, ProcessReciveData_t proces
 
     /* Set Timeout */
     struct timeval tv;
-    tv.tv_sec = 1;
+    tv.tv_sec = SOCKET_TIMEOUT_S;
     tv.tv_usec = 0;
     setsockopt(m_socketClient, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
 

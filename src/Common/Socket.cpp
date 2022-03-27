@@ -28,15 +28,24 @@
 
 Socket::Socket()
 {
-    m_DataToSend.clear();
     memset(m_recv_buf, 0, BUFFER_SIZE * sizeof(BufferData_t));
     memset(m_send_buf, 0, BUFFER_SIZE * sizeof(BufferData_t));
 }
 
-void Socket::sendData(CommunicationsBuffer_t& data)
+void Socket::sendData(BufferData_t* bufferData, size_t bufferSize)
 {
-    // TODO: Agregar guarda para que el vector de transmision no supere el tañano maximo */
-    m_DataToSend.insert(m_DataToSend.end(), data.begin(), data.end());
+    /* Transimision */
+    DEBUG_MSG("Socket::sendData() - size:" << bufferSize << std::endl);
+    if (send(m_socket, bufferData, bufferSize*sizeof(BufferData_t), 0) == -1)
+    {
+
+    }
+    DEBUG_MSG("Socket::sendData()" << std::endl);
+}
+
+void Socket::setChunkDataSize(size_t size)
+{
+    m_chunkSize = size;
 }
 
 void Socket::bufferDataProcces(void)
@@ -44,29 +53,16 @@ void Socket::bufferDataProcces(void)
     /* Recepcion */
     int32_t data_recv = 0;
     memset(m_recv_buf, 0, BUFFER_SIZE * sizeof(BufferData_t));
-    data_recv = recv(m_socket, m_recv_buf, BUFFER_SIZE, 0);
-    for (int32_t i = 0; i < data_recv; ++i)
+    data_recv = recv(m_socket, m_recv_buf, m_chunkSize, 0);
+    if (data_recv > 0)
     {
-        /* Proceso datos recibidos */
         if (m_processReciveData)
         {
-            (*m_processReciveData)(m_recv_buf[i]);
+            DEBUG_MSG("Socket::bufferDataProcces() - size:" << data_recv << std::endl);
+            (*m_processReciveData)(m_recv_buf, data_recv);
+            DEBUG_MSG("Socket::bufferDataProcces()" << std::endl);
         }
-    }
-
-    /* Transimision */
-    if (m_DataToSend.size())
-    {
-        memset(m_send_buf, 0, BUFFER_SIZE * sizeof(BufferData_t));
-        for (int i = 0; i < m_DataToSend.size(); ++i)
-        {
-            m_send_buf[i] = m_DataToSend[i];
-        }
-        if (send(m_socket, m_send_buf, m_DataToSend.size()*sizeof(BufferData_t), 0) == -1)
-        {
-        }
-        m_DataToSend.clear();
-    }
+    }      
 }
 
 /*----------------------------------------------------------------------------*/

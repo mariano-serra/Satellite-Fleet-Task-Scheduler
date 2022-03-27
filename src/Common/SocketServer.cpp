@@ -66,6 +66,12 @@ SocketServer::SocketServer(UniqueDeviceId_t serverId, ProcessReciveData_t proces
         DEBUG_MSG("Error on listen call" << std::endl);
     }
 
+    /* Set Timeout */
+    struct timeval tv;
+    tv.tv_sec = SOCKET_TIMEOUT_S;
+    tv.tv_usec = 0;
+    setsockopt(m_socketServer, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
+
     /* Handler de recepcion */
     m_processReciveData = processReciveData;
 
@@ -103,9 +109,9 @@ void SocketServer::runnerTask(void)
 
         /* Set Timeout */
         struct timeval tv;
-        tv.tv_sec = 1;
+        tv.tv_sec = SOCKET_TIMEOUT_S;
         tv.tv_usec = 0;
-        setsockopt(m_socketServer, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
+        setsockopt(m_socket, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
 
         DEBUG_MSG("Server connected" << std::endl);
         m_state = CONNECTED;
