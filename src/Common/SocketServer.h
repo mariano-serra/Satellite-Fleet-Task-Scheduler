@@ -29,19 +29,8 @@ class SocketServer : public Socket
 public:
     SocketServer(UniqueDeviceId_t serverId);
     ~SocketServer();
-    
-    void runnerTask(void);
 
 private:
-    /* Server Socket State */
-    typedef enum State
-    {
-        WAITING_FOR_CLIENT,
-        CONNECTED,
-        /*---*/
-        NUMBER_STATES
-    } State_t;
-    State_t m_state;
 
     /* Socket Data */
     int m_socketServer = 0;

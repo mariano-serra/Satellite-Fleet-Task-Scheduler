@@ -19,8 +19,10 @@
 /* ---------------------------------------------------------------------------*/
 /* Defines, Estructuras y Typedef Compartidos 								  */
 /* ---------------------------------------------------------------------------*/
-#define BUFFER_SIZE (5000)
-#define SOCKET_TIMEOUT_S (1)
+#define BUFFER_SIZE         (5000)
+#define SOCKET_TIMEOUT_S    (0)
+#define SOCKET_TIMEOUT_uS   (100000)    // 0.1s
+
 
 typedef char BufferData_t;
 

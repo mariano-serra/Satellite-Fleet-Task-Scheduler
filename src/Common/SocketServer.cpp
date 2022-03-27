@@ -66,56 +66,26 @@ SocketServer::SocketServer(UniqueDeviceId_t serverId)
         DEBUG_MSG("Error on listen call" << std::endl);
     }
 
-    /* Set Timeout */
+    DEBUG_MSG("Waiting for connection...." << std::endl);
+    m_sock_len = 0;
+    m_socket = accept(m_socketServer, (struct sockaddr*)&m_remote, &m_sock_len);
+    if ( m_socket == -1 )
+    {
+        DEBUG_MSG("Error on accept() call" << std::endl);
+        return;
+    }
+
+    /* Set Timeout client */
     struct timeval tv;
     tv.tv_sec = SOCKET_TIMEOUT_S;
-    tv.tv_usec = 0;
+    tv.tv_usec = SOCKET_TIMEOUT_uS;
     setsockopt(m_socketServer, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
-
-    /* Estado */
-    m_state = WAITING_FOR_CLIENT;
-    DEBUG_MSG("WAITING_FOR_CLIENT" << std::endl);
+    setsockopt(m_socket, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
 }
 
 SocketServer::~SocketServer()
 {
     close(m_socket);
-}
-
-void SocketServer::runnerTask(void)
-{
-    switch (m_state)
-    {
-    case CONNECTED:
-
-        /* Do Nothing */
-
-        break;
-
-    case WAITING_FOR_CLIENT:
-
-        DEBUG_MSG("Waiting for connection...." << std::endl);
-        m_sock_len = 0;
-        m_socket = accept(m_socketServer, (struct sockaddr*)&m_remote, &m_sock_len);
-        if ( m_socket == -1 )
-        {
-            DEBUG_MSG("Error on accept() call" << std::endl);
-            return;
-        }
-
-        /* Set Timeout */
-        struct timeval tv;
-        tv.tv_sec = SOCKET_TIMEOUT_S;
-        tv.tv_usec = 0;
-        setsockopt(m_socket, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
-
-        DEBUG_MSG("Server connected" << std::endl);
-        m_state = CONNECTED;
-
-        break;
-    default:
-        break;
-    }
 }
 
 /*----------------------------------------------------------------------------*/
