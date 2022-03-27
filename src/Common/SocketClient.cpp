@@ -31,8 +31,8 @@
 SocketClient::SocketClient(UniqueDeviceId_t serverId)
 {
     /* Defino nombre de Server */
-    char sat1ServerName[] = "../../Satelite/main/SAT1_SERVER";
-    char sat2ServerName[] = "../../Satelite/main/SAT2_SERVER";
+    char sat1ServerName[] = "SAT1_SERVER";
+    char sat2ServerName[] = "SAT2_SERVER";
     char* serverName;
     if (serverId == SATELITE_1_ID)
     {
