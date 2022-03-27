@@ -39,6 +39,7 @@ AppConexionLayer::~AppConexionLayer()
 
 void AppConexionLayer::sendTask(Task* task)
 {
+    DEBUG_MSG("sendTask()");
     FrameTask_t frameTask;
     Resources::ResourcesList_t resourcesList = task->getResourcesList();
 
@@ -52,6 +53,7 @@ void AppConexionLayer::sendTask(Task* task)
     frameTask.state = task->getState();
 
     m_frameLayer->sendFrameTask(&frameTask);
+    DEBUG_MSG("sendTask()");
 }
 
 bool AppConexionLayer::receiveTask(Task** task)
@@ -59,6 +61,7 @@ bool AppConexionLayer::receiveTask(Task** task)
     bool ret = false;
     FrameTask_t frameTask;
 
+    DEBUG_MSG("receiveTask()");
     ret = m_frameLayer->receiveFrameTask(&frameTask);
     if (ret)
     {
@@ -79,6 +82,7 @@ bool AppConexionLayer::receiveTask(Task** task)
         DEBUG_MSG("new Task()");
         (*task) = new Task(id, name, resourcesList, payoff, state);
     }
+    DEBUG_MSG("receiveTask()");
 
     return ret;  
 }

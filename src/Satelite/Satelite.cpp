@@ -81,14 +81,26 @@ void Satelite::setTaskState(Task* task, Task::State_t state)
     {
         m_appConexionLayer->sendTask(task);
     }
+    DEBUG_MSG("END Task: Id=" << task->getId() << " - State=" << task->getState());
+    delete(task);
 }
 
 void Satelite::runnerTask(void)
-{
-    /* Satelite Runner */
+{ 
+    /* Get new Task ToDo */
+    if (m_appConexionLayer)
+    {
+        Task* newTask;
+        if (m_appConexionLayer->receiveTask(&newTask))
+        {
+            DEBUG_MSG("NEW Task: Id=" << newTask->getId());
+            addTaskToDo(newTask); 
+        }
+    }
+
+    /* Run Satelite Task List */
     for (TaskMap_t::iterator ongoingTask = m_ongoingTasks.begin(); ongoingTask != m_ongoingTasks.end(); ++ongoingTask)
     {
-
         Task* task = ongoingTask->first;
         TaskTime_t* time = &(ongoingTask->second);
         (*time) = (*time) - 1;
