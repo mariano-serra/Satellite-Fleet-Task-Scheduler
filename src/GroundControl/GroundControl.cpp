@@ -28,16 +28,16 @@
 /* ---------------------------------------------------------------------------*/
 /* Implementacion de clases y funciones                                       */
 /* ---------------------------------------------------------------------------*/
-    
+
 GroundControl::GroundControl(UniqueDeviceId_t id, AppConexionLayer* satelite1AppConexionLayer, AppConexionLayer* satelite2AppConexionLayer)
 {
 	m_groundControlId = id;
 
-    m_satelite1HardwareResources = new Resources(SATELITE_1_RES);
-    m_satelite1AvailableResources = new Resources(SATELITE_1_RES);
+	m_satelite1HardwareResources = new Resources(SATELITE_1_RES);
+	m_satelite1AvailableResources = new Resources(SATELITE_1_RES);
 
-    m_satelite2HardwareResources = new Resources(SATELITE_2_RES);
-    m_satelite2AvailableResources = new Resources(SATELITE_2_RES);
+	m_satelite2HardwareResources = new Resources(SATELITE_2_RES);
+	m_satelite2AvailableResources = new Resources(SATELITE_2_RES);
 
 	m_TodoTaskList.clear();
 	m_BestTodoTaskList.clear();
@@ -65,7 +65,7 @@ void GroundControl::ProcessToDoTaskList(void)
 
 	/* Trim */
 	calcBestToDoTaskList();
-	
+
 	/* Solver */
 	solveToDoTaskList();
 }
@@ -155,47 +155,47 @@ void GroundControl::updateTaskState(void)
 {
 	bool newResourcesAvailable = false;
 
-    /* Get new Task ToDo */
-    if (m_satelite1AppConexionLayer)
-    {
-        Task* newTask;
-        if (m_satelite1AppConexionLayer->receiveTask(&newTask))
-        {
-            updateSatelite1TaskState(newTask);
-            newResourcesAvailable = true;
-        }
-    }
+	/* Get new Task ToDo */
+	if (m_satelite1AppConexionLayer)
+	{
+		Task* newTask;
+		if (m_satelite1AppConexionLayer->receiveTask(&newTask))
+		{
+			updateSatelite1TaskState(newTask);
+			newResourcesAvailable = true;
+		}
+	}
 
-    /* Get new Task ToDo */
-    if (m_satelite2AppConexionLayer)
-    {
-        Task* newTask;
-        if (m_satelite2AppConexionLayer->receiveTask(&newTask))
-        {
-            updateSatelite2TaskState(newTask);
-            newResourcesAvailable = true;
-        }
-    }
+	/* Get new Task ToDo */
+	if (m_satelite2AppConexionLayer)
+	{
+		Task* newTask;
+		if (m_satelite2AppConexionLayer->receiveTask(&newTask))
+		{
+			updateSatelite2TaskState(newTask);
+			newResourcesAvailable = true;
+		}
+	}
 
-    if (newResourcesAvailable)
-    {
-    	ProcessToDoTaskList();
-    }
+	if (newResourcesAvailable)
+	{
+		ProcessToDoTaskList();
+	}
 }
 
 void GroundControl::runnerTask(void)
 {
-    updateTaskState();
+	updateTaskState();
 }
 
 bool GroundControl::validateTaskOverHardwareResources(Task& task)
 {
 	Resources::ResourcesList_t resourcesList = task.getResourcesList();
 
-	bool ret = (m_satelite1HardwareResources->contains(resourcesList)) || 
-		       (m_satelite2HardwareResources->contains(resourcesList));
+	bool ret = (m_satelite1HardwareResources->contains(resourcesList)) ||
+	           (m_satelite2HardwareResources->contains(resourcesList));
 
-    return ret;
+	return ret;
 }
 
 void GroundControl::sortToDoTaskListByPayoff(void)
@@ -203,7 +203,7 @@ void GroundControl::sortToDoTaskListByPayoff(void)
 	typedef Task* TaskPtr_t;
 
 	std::sort(m_TodoTaskList.begin(), m_TodoTaskList.end(),
-              [](const TaskPtr_t& task1, const TaskPtr_t& task2) { return task1->getPayoff() > task2->getPayoff();});
+	[](const TaskPtr_t& task1, const TaskPtr_t& task2) { return task1->getPayoff() > task2->getPayoff();});
 
 }
 
@@ -234,8 +234,8 @@ void GroundControl::solveToDoTaskList(void)
 		PermutationTaskSolver::makeTaskPermutatioMatrix(m_BestTodoTaskList);
 		PermutationTaskSolver::sortTaskPermutatioMatrixByPayoff();
 		PermutationTaskSolver::validateTaskPermutatioMatrix(*m_satelite1AvailableResources, *m_satelite2AvailableResources,
-														    m_UnassignedTaskList, m_Satelite1TaskList, m_Satelite2TaskList);
-		
+		        m_UnassignedTaskList, m_Satelite1TaskList, m_Satelite2TaskList);
+
 		sendSatelite1TaskList(m_Satelite1TaskList);
 		sendSatelite2TaskList(m_Satelite2TaskList);
 

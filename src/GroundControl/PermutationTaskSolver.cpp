@@ -68,7 +68,7 @@ void PermutationTaskSolver::makeTaskPermutatioMatrix(Task::TaskList_t& taskList)
     for (Task::TaskList_t::iterator taskListIt = taskList.begin(); taskListIt < taskList.end(); ++taskListIt)
     {
         Task* task = (*taskListIt);
-        maxPayoff += task->getPayoff(); 
+        maxPayoff += task->getPayoff();
     }
 
     /* Permutation Matrix */
@@ -83,7 +83,7 @@ void PermutationTaskSolver::makeTaskPermutatioMatrix(Task::TaskList_t& taskList)
         TaskIdListVector_t taskIdListVector(deviceNumber);
 
         m_devicePermutationMatrix.push_back(deviceVector);
-        
+
         DEBUG_MSG("Permutation:\t" << permutation  << "\t- Devices:\t" << deviceVector);
 
         /*  TaskList Permutation Matrix*/
@@ -112,7 +112,7 @@ void PermutationTaskSolver::makeTaskPermutatioMatrix(Task::TaskList_t& taskList)
             unassignedTaskPayoff += task->getPayoff();
         }
         m_assignTaskPayoffVector.push_back(maxPayoff - unassignedTaskPayoff);
-        
+
         DEBUG_MSG("\t- Payoff:\t" << m_assignTaskPayoffVector[permutation] << std::endl);
 
         /* Permutation Vector */
@@ -126,14 +126,14 @@ void PermutationTaskSolver::makeTaskPermutatioMatrix(Task::TaskList_t& taskList)
 void PermutationTaskSolver::sortTaskPermutatioMatrixByPayoff(void)
 {
     /* Sorting */
-    std::sort(m_permutationVector.begin(), m_permutationVector.end(), 
-              [&](const int& a, const int& b) {return (m_assignTaskPayoffVector[a] > m_assignTaskPayoffVector[b]);}); /* FIXME: definir afuera, si es posible */
+    std::sort(m_permutationVector.begin(), m_permutationVector.end(),
+    [&](const int& a, const int& b) {return (m_assignTaskPayoffVector[a] > m_assignTaskPayoffVector[b]);}); /* FIXME: definir afuera, si es posible */
 
     DEBUG_MSG("Sorted Payoff Permutation Verctor:\t" << m_permutationVector << std::endl);
 }
 
-bool PermutationTaskSolver::validateTaskPermutatioMatrix(Resources& satelite1Resources, Resources& satelite2Resources, 
-                                                         Task::TaskList_t& unassignedTaskList, Task::TaskList_t& satelite1TaskList, Task::TaskList_t& satelite2TaskList)
+bool PermutationTaskSolver::validateTaskPermutatioMatrix(Resources& satelite1Resources, Resources& satelite2Resources,
+        Task::TaskList_t& unassignedTaskList, Task::TaskList_t& satelite1TaskList, Task::TaskList_t& satelite2TaskList)
 {
     bool ret = false;
     uint32_t permutation = 0;
@@ -144,7 +144,7 @@ bool PermutationTaskSolver::validateTaskPermutatioMatrix(Resources& satelite1Res
     for (PermutationVector_t::iterator permutationIt = m_permutationVector.begin(); permutationIt < m_permutationVector.end() && continueFlag; ++permutationIt)
     {
         m_resourcesListVector.clear();
-        
+
         permutation = (*permutationIt);
 
         DEBUG_MSG("Permutation:\t" << permutation << std::endl);
@@ -168,7 +168,7 @@ bool PermutationTaskSolver::validateTaskPermutatioMatrix(Resources& satelite1Res
 
             }
             DEBUG_MSG("\t- ResourcesList:\t" << resourcesList);
-            m_resourcesListVector.push_back(resourcesList);      
+            m_resourcesListVector.push_back(resourcesList);
 
             DEBUG_MSG(resourcesList << std::endl);
 

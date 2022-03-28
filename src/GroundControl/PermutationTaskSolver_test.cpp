@@ -82,7 +82,7 @@ TEST_F(PermutationTaskSolver_test, PermutationMatrixTest)
     PermutationTaskSolver::initPermutatioMatrix();
     PermutationTaskSolver::makeTaskPermutatioMatrix(m_taskList);
 
-    EXPECT_EQ(PermutationTaskSolver::m_permutationVector.size(),9); // NUM_DEVICES_ID ^ (TasksNumber) = 3^(2) = 9;
+    EXPECT_EQ(PermutationTaskSolver::m_permutationVector.size(), 9); // NUM_DEVICES_ID ^ (TasksNumber) = 3^(2) = 9;
 
     Task::Payoff_t maxPayoff = m_task1->getPayoff() + m_task2->getPayoff();
 
@@ -96,12 +96,12 @@ TEST_F(PermutationTaskSolver_test, PermutationMatrixTest)
 TEST_F(PermutationTaskSolver_test, SortTaskPermutatioMatrixByPayoffTest)
 {
     /* Lista de permutacion inicial */
-    PermutationTaskSolver::PermutationVector_t expectList = {0,1,2,3,4,5,6,7,8};
+    PermutationTaskSolver::PermutationVector_t expectList = {0, 1, 2, 3, 4, 5, 6, 7, 8};
     EXPECT_THAT(PermutationTaskSolver::m_permutationVector, expectList);
 
     PermutationTaskSolver::sortTaskPermutatioMatrixByPayoff();
 
-    /* Lista de permutacion ordenadas manualmente de mayo a menor  
+    /* Lista de permutacion ordenadas manualmente de mayo a menor
        payoff  = {12.5, 12.5, 12.5, 12.5, 10.0, 10.0, 2.5, 2.5, 0.0} */
     expectList = {4,    5,    7,    8,    1,    2,    3,   6,   0  };
     EXPECT_THAT(PermutationTaskSolver::m_permutationVector, expectList);
@@ -114,7 +114,7 @@ TEST_F(PermutationTaskSolver_test, ValidateTaskPermutatioMatrixTest)
     Task::TaskList_t satelite2TaskList;
 
     EXPECT_TRUE(PermutationTaskSolver::validateTaskPermutatioMatrix(*m_satelite1Resources, *m_satelite2Resources,
-                                                                    unassignedTaskList, satelite1TaskList, satelite2TaskList));
+                unassignedTaskList, satelite1TaskList, satelite2TaskList));
 
     Task::TaskList_t expectedUnassignedTaskList = {};
     EXPECT_THAT(unassignedTaskList, expectedUnassignedTaskList);
