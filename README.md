@@ -75,11 +75,11 @@ Ver documentacion de codigo (Doxygen).
 
 DIAGRAMAS
 
-![Screenshot](diagramaApps.png)
+![Screenshot](src/diagramaApps.png)
 
-![Screenshot](diagramaGroundControl.png)
+![Screenshot](src/diagramaGroundControl.png)
 
-![Screenshot](diagramaSatelite.png)
+![Screenshot](src/diagramaSatelite.png)
 
 TODO
 
